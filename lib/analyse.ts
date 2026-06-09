@@ -2,13 +2,15 @@ import Anthropic from '@anthropic-ai/sdk'
 import type { PaletteResult, MediaType } from './types'
 
 const SYSTEM_PROMPT = `You are a professional photography session colour stylist.
-Analyse a dog's coat colour and undertones, then recommend clothing colours that will
-photograph beautifully alongside the dog.
+Analyse the dog's fur/coat colour and undertones ONLY. Ignore the background, grass, sky,
+walls, furniture, or any other environmental elements in the photo. Focus exclusively on
+what the dog's coat looks like — its dominant colour, undertones, and warmth or coolness.
 
-Apply colour theory — complementary, analogous, and neutral harmonies — to select tones
-that enhance the dog's natural colouring without competing with it.
+Recommend clothing colours for the dog's owner that will photograph beautifully alongside
+the dog's coat. Apply colour theory — complementary, analogous, and neutral harmonies —
+to select tones that enhance the dog's natural colouring without competing with it.
 
-Respond with valid JSON matching this exact structure. No markdown, no explanation, just JSON:
+Respond with valid JSON only. No markdown, no code fences, no explanation — raw JSON only:
 {
   "multiDogDetected": boolean,
   "wear": [{ "hex": "#RRGGBB", "name": "Colour Name", "description": "Why this works" }],
@@ -63,10 +65,14 @@ export async function analyseImage(
     const text =
       (response.content[0]?.type === 'text' ? (response.content[0] as { type: string; text: string }).text : '')
 
+    // Strip markdown code fences if Claude wraps the response
+    const cleaned = text.replace(/^```(?:json)?\s*/i, '').replace(/\s*```\s*$/i, '').trim()
+
     let parsed: Record<string, unknown>
     try {
-      parsed = JSON.parse(text)
+      parsed = JSON.parse(cleaned)
     } catch {
+      console.error('[analyse] JSON parse failed, raw text:', text.slice(0, 200))
       throw new Error('api_error')
     }
 

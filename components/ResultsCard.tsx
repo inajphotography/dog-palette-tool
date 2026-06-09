@@ -30,8 +30,8 @@ export function ResultsCard({ result, imageSrc, onReset }: ResultsCardProps) {
       {/* Downloadable card — html2canvas captures this ref */}
       <div ref={cardRef} className="w-full max-w-md bg-white rounded-2xl overflow-hidden shadow-lg">
         {/* Dog photo with overlay swatches */}
-        <div className="relative w-full h-56 bg-brand-ivory">
-          <Image src={imageSrc} alt="Your dog" fill className="object-cover" unoptimized />
+        <div className="relative w-full h-72 bg-brand-dark">
+          <Image src={imageSrc} alt="Your dog" fill className="object-contain" unoptimized />
           <div className="absolute top-3 left-1/2 -translate-x-1/2 flex gap-2 bg-brand-dark bg-opacity-50 backdrop-blur-sm px-3 py-2 rounded-full">
             {result.wear.slice(0, 5).map((swatch) => (
               <div
