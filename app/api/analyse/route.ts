@@ -22,6 +22,7 @@ export async function POST(request: NextRequest) {
     const result = await analyseImage(base64, mediaType)
     return NextResponse.json(result)
   } catch (error) {
+    console.error('[analyse] error:', error instanceof Error ? error.message : error)
     const message = error instanceof Error ? error.message : 'api_error'
     if (message === 'no_dog') {
       return NextResponse.json({ error: 'no_dog' }, { status: 422 })

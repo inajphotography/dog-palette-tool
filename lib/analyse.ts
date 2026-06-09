@@ -1,8 +1,6 @@
 import Anthropic from '@anthropic-ai/sdk'
 import type { PaletteResult, MediaType } from './types'
 
-const client = new Anthropic()
-
 const SYSTEM_PROMPT = `You are a professional photography session colour stylist.
 Analyse a dog's coat colour and undertones, then recommend clothing colours that will
 photograph beautifully alongside the dog.
@@ -29,6 +27,7 @@ export async function analyseImage(
   base64Image: string,
   mediaType: MediaType,
 ): Promise<PaletteResult> {
+  const client = new Anthropic({ apiKey: process.env.ANTHROPIC_API_KEY })
   try {
     const response = await client.messages.create({
       model: 'claude-sonnet-4-6',
