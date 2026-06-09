@@ -1,5 +1,6 @@
 'use client'
 
+import Image from 'next/image'
 import { useState, useRef } from 'react'
 import { config } from '@/photographer.config'
 import type { MediaType } from '@/lib/types'
@@ -89,8 +90,23 @@ export function UploadScreen({ onUpload }: UploadScreenProps) {
 
   return (
     <div className="min-h-screen bg-brand-ivory-light flex flex-col">
-      <header className="bg-brand-dark py-4 px-6 flex items-center justify-center gap-3">
-        <span className="font-heading text-brand-pink tracking-widest text-sm uppercase">
+      <header className="bg-brand-dark py-4 px-6 flex items-center justify-center">
+        <Image
+          src={config.photographer.logoPath}
+          alt={config.photographer.name}
+          width={160}
+          height={52}
+          className="h-10 w-auto object-contain"
+          onError={(e) => {
+            e.currentTarget.style.display = 'none'
+            e.currentTarget.nextElementSibling?.removeAttribute('style')
+          }}
+          unoptimized
+        />
+        <span
+          className="font-heading text-brand-pink tracking-widest text-sm uppercase"
+          style={{ display: 'none' }}
+        >
           {config.photographer.name}
         </span>
       </header>
