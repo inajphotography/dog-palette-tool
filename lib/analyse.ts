@@ -62,7 +62,7 @@ export async function analyseImage(
     })
 
     const text =
-      response.content[0].type === 'text' ? response.content[0].text : ''
+      (response.content[0]?.type === 'text' ? (response.content[0] as { type: string; text: string }).text : '')
 
     let parsed: Record<string, unknown>
     try {
