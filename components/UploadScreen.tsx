@@ -94,12 +94,13 @@ export function UploadScreen({ onUpload }: UploadScreenProps) {
         <Image
           src={config.photographer.logoPath}
           alt={config.photographer.name}
-          width={160}
-          height={52}
-          className="h-10 w-auto object-contain"
+          width={180}
+          height={56}
+          className="h-12 w-auto object-contain"
           onError={(e) => {
             e.currentTarget.style.display = 'none'
-            e.currentTarget.nextElementSibling?.removeAttribute('style')
+            const fallback = e.currentTarget.nextElementSibling as HTMLElement
+            if (fallback) fallback.style.display = 'block'
           }}
           unoptimized
         />
