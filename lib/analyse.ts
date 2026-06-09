@@ -75,7 +75,7 @@ export async function analyseImage(
       throw new Error('no_dog')
     }
 
-    return parsed as PaletteResult
+    return parsed as unknown as PaletteResult
   } catch (error) {
     if (
       error instanceof Error &&
