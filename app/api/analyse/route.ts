@@ -25,7 +25,7 @@ export async function POST(request: NextRequest) {
     )
   }
 
-  if (!VALID_MEDIA_TYPES.includes(mediaType)) {
+  if (!VALID_MEDIA_TYPES.includes(mediaType as MediaType)) {
     return NextResponse.json({ error: 'invalid_image' }, { status: 400 })
   }
 
