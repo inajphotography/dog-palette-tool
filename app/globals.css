@@ -11,15 +11,4 @@
   --color-brand-teal: #0F6668;
   --color-brand-brown: #6D341B;
 
-  --font-heading: var(--font-heading), Georgia, serif;
-  --font-body: var(--font-body), sans-serif;
-}
-
-@layer base {
-  h1, h2, h3 {
-    font-family: var(--font-heading), Georgia, serif;
-  }
-  body {
-    font-family: var(--font-body), sans-serif;
-  }
 }
