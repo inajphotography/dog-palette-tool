@@ -4,11 +4,47 @@ import { useState, useRef } from 'react'
 import { config } from '@/photographer.config'
 import type { MediaType } from '@/lib/types'
 
-const MAX_FILE_SIZE = 10 * 1024 * 1024
-const VALID_TYPES: MediaType[] = ['image/jpeg', 'image/png', 'image/webp']
+const MAX_FILE_SIZE = 50 * 1024 * 1024 // 50MB — we resize before sending
+const MAX_DIMENSION = 1200 // resize to max 1200px on longest side
+// Accept any image the browser can decode — includes HEIC on iOS (browser converts it)
+const ACCEPT = 'image/*'
 
 interface UploadScreenProps {
   onUpload: (base64: string, mediaType: MediaType) => void
+}
+
+function resizeAndEncode(file: File): Promise<{ base64: string; mediaType: MediaType }> {
+  return new Promise((resolve, reject) => {
+    const reader = new FileReader()
+    reader.onerror = reject
+    reader.onload = (e) => {
+      const img = new window.Image()
+      img.onerror = reject
+      img.onload = () => {
+        let { width, height } = img
+        if (width > MAX_DIMENSION || height > MAX_DIMENSION) {
+          if (width > height) {
+            height = Math.round((height * MAX_DIMENSION) / width)
+            width = MAX_DIMENSION
+          } else {
+            width = Math.round((width * MAX_DIMENSION) / height)
+            height = MAX_DIMENSION
+          }
+        }
+        const canvas = document.createElement('canvas')
+        canvas.width = width
+        canvas.height = height
+        const ctx = canvas.getContext('2d')
+        if (!ctx) { reject(new Error('canvas')); return }
+        ctx.drawImage(img, 0, 0, width, height)
+        const dataUrl = canvas.toDataURL('image/jpeg', 0.85)
+        const base64 = dataUrl.split(',')[1]
+        resolve({ base64, mediaType: 'image/jpeg' })
+      }
+      img.src = e.target?.result as string
+    }
+    reader.readAsDataURL(file)
+  })
 }
 
 export function UploadScreen({ onUpload }: UploadScreenProps) {
@@ -31,18 +67,24 @@ export function UploadScreen({ onUpload }: UploadScreenProps) {
     setSelectedFile(file)
   }
 
-  function handleSubmit(e: React.FormEvent) {
+  async function handleSubmit(e: React.FormEvent) {
     e.preventDefault()
     if (!selectedFile) return
 
-    const reader = new FileReader()
-    reader.onload = (event) => {
-      const dataUrl = event.target?.result as string
-      const [header, base64] = dataUrl.split(',')
-      const mediaType = header.split(':')[1].split(';')[0] as MediaType
+    try {
+      const { base64, mediaType } = await resizeAndEncode(selectedFile)
       onUpload(base64, mediaType)
+    } catch {
+      // fallback: send as-is if canvas resize fails
+      const reader = new FileReader()
+      reader.onload = (event) => {
+        const dataUrl = event.target?.result as string
+        const [header, base64] = dataUrl.split(',')
+        const mediaType = (header.split(':')[1].split(';')[0] || 'image/jpeg') as MediaType
+        onUpload(base64, mediaType)
+      }
+      reader.readAsDataURL(selectedFile)
     }
-    reader.readAsDataURL(selectedFile)
   }
 
   return (
@@ -86,14 +128,14 @@ export function UploadScreen({ onUpload }: UploadScreenProps) {
               {selectedFile ? selectedFile.name : 'Tap to upload'}
             </span>
             <span className="text-xs text-brand-light-green">
-              JPG, PNG or WebP — up to 10MB
+              Any photo from your camera roll
             </span>
           </button>
 
           <input
             ref={inputRef}
             type="file"
-            accept={VALID_TYPES.join(',')}
+            accept={ACCEPT}
             onChange={handleFileChange}
             className="hidden"
             data-testid="file-input"
