@@ -1,7 +1,7 @@
 'use client'
 
 import Image from 'next/image'
-import { useRef } from 'react'
+import { useRef, useState } from 'react'
 import { ColourSwatch } from './ColourSwatch'
 import { DownloadButton } from './DownloadButton'
 import { config } from '@/photographer.config'
@@ -15,6 +15,7 @@ interface ResultsCardProps {
 
 export function ResultsCard({ result, imageSrc, onReset }: ResultsCardProps) {
   const cardRef = useRef<HTMLDivElement>(null)
+  const [isPortrait, setIsPortrait] = useState(false)
 
   return (
     <div className="min-h-screen bg-brand-ivory-light flex flex-col items-center py-6 px-4">
@@ -30,8 +31,18 @@ export function ResultsCard({ result, imageSrc, onReset }: ResultsCardProps) {
       {/* Downloadable card — html2canvas captures this ref */}
       <div ref={cardRef} className="w-full max-w-md bg-white rounded-2xl overflow-hidden shadow-lg">
         {/* Dog photo with overlay swatches */}
-        <div className="relative w-full h-72 bg-brand-dark">
-          <Image src={imageSrc} alt="Your dog" fill className="object-contain" unoptimized />
+        <div className={`relative w-full bg-brand-dark ${isPortrait ? 'aspect-[3/4]' : 'h-72'}`}>
+          <Image
+            src={imageSrc}
+            alt="Your dog"
+            fill
+            className="object-cover object-top"
+            onLoad={(e) => {
+              const img = e.currentTarget
+              setIsPortrait(img.naturalHeight > img.naturalWidth)
+            }}
+            unoptimized
+          />
           <div className="absolute top-3 left-1/2 -translate-x-1/2 flex gap-2 bg-brand-dark bg-opacity-50 backdrop-blur-sm px-3 py-2 rounded-full">
             {result.wear.slice(0, 5).map((swatch) => (
               <div
