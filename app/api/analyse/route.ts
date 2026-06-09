@@ -7,11 +7,11 @@ const VALID_MEDIA_TYPES: MediaType[] = ['image/jpeg', 'image/png', 'image/webp']
 export async function POST(request: NextRequest) {
   console.log('[analyse] POST received')
 
-  let base64: string, mediaType: string
+  let base64: string, mediaType: MediaType
   try {
     const body = await request.json()
     base64 = body.base64
-    mediaType = body.mediaType
+    mediaType = body.mediaType as MediaType
     console.log('[analyse] body parsed, mediaType:', mediaType, 'base64 length:', base64?.length)
   } catch (e) {
     console.error('[analyse] body parse error:', e)
@@ -25,7 +25,7 @@ export async function POST(request: NextRequest) {
     )
   }
 
-  if (!VALID_MEDIA_TYPES.includes(mediaType as MediaType)) {
+  if (!VALID_MEDIA_TYPES.includes(mediaType)) {
     return NextResponse.json({ error: 'invalid_image' }, { status: 400 })
   }
 
