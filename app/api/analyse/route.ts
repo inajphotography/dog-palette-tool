@@ -35,8 +35,8 @@ export async function POST(request: NextRequest) {
   } catch (error) {
     console.error('[analyse] analyseImage error:', error instanceof Error ? error.message : error)
     const message = error instanceof Error ? error.message : 'api_error'
-    if (message === 'no_dog') {
-      return NextResponse.json({ error: 'no_dog' }, { status: 422 })
+    if (message === 'no_subject') {
+      return NextResponse.json({ error: 'no_subject' }, { status: 422 })
     }
     return NextResponse.json({ error: 'api_error' }, { status: 500 })
   }

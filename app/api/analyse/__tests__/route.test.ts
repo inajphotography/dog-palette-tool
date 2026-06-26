@@ -12,7 +12,8 @@ import { analyseImage } from '@/lib/analyse'
 const mockAnalyseImage = analyseImage as jest.MockedFunction<typeof analyseImage>
 
 const MOCK_RESULT = {
-  multiDogDetected: false,
+  detectedAnimal: 'dog',
+  multiSubjectDetected: false,
   wear: [{ hex: '#8A9A7B', name: 'Sage Green', description: 'Works well' }],
   avoid: [{ hex: '#E74C3C', name: 'Bright Red', reason: 'Clashes' }],
   guidance: 'Natural textures work beautifully.',
@@ -36,7 +37,7 @@ describe('POST /api/analyse', () => {
     const json = await response.json()
 
     expect(response.status).toBe(200)
-    expect(json.multiDogDetected).toBe(false)
+    expect(json.multiSubjectDetected).toBe(false)
     expect(json.wear).toHaveLength(1)
   })
 
@@ -55,14 +56,14 @@ describe('POST /api/analyse', () => {
     expect(response.status).toBe(400)
   })
 
-  it('returns 422 when no dog is detected', async () => {
-    mockAnalyseImage.mockRejectedValue(new Error('no_dog'))
+  it('returns 422 when the animal is not detected', async () => {
+    mockAnalyseImage.mockRejectedValue(new Error('no_subject'))
 
     const response = await POST(makeRequest({ base64: 'abc123', mediaType: 'image/jpeg' }))
     const json = await response.json()
 
     expect(response.status).toBe(422)
-    expect(json.error).toBe('no_dog')
+    expect(json.error).toBe('no_subject')
   })
 
   it('returns 500 when Claude API fails', async () => {
