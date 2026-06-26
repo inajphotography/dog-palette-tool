@@ -7,6 +7,10 @@ const DOG_HORSE: Subject[] = [
   { noun: 'dog', nounPlural: 'dogs', coatWord: 'coat' },
   { noun: 'horse', nounPlural: 'horses', coatWord: 'coat' },
 ]
+const DOG_CAT: Subject[] = [
+  { noun: 'dog', nounPlural: 'dogs', coatWord: 'coat' },
+  { noun: 'cat', nounPlural: 'cats', coatWord: 'fur' },
+]
 
 describe('buildSystemPrompt', () => {
   it('single species: names the animal and asks for no_subject on miss', () => {
@@ -26,5 +30,9 @@ describe('buildSystemPrompt', () => {
     const p = buildSystemPrompt(DOG_HORSE)
     expect(p).toContain('dog, horse')
     expect(p.toLowerCase()).toContain('identify')
+  })
+
+  it('multi species with mixed coat words says "coat or fur"', () => {
+    expect(buildSystemPrompt(DOG_CAT)).toContain('coat or fur')
   })
 })

@@ -20,17 +20,17 @@ YOUR ONLY JOB: Look at the animal's ${coat} colour. Recommend clothing colours f
 
 ${intro}
 
-CRITICAL — what to do:
+CRITICAL: what to do:
 1. Identify the animal's primary ${coat} colour and undertones
 2. Use colour theory to recommend owner clothing colours that COMPLEMENT the ${coat}
 3. Identify colours to AVOID because they clash with the ${coat}
 
-CRITICAL — what NOT to do:
+CRITICAL: what NOT to do:
 - Do not recommend colours based on background, furniture, props, or accessories
 - Do not consider the colour of the owner's skin, eyes, or hair
 - ONLY consider the animal's ${coat} colour
 
-Your recommendations must clash or complement with the animal's ${coat} — not colours that appear elsewhere in the photo.
+Your recommendations must clash or complement with the animal's ${coat}, not colours that appear elsewhere in the photo.
 
 Apply colour theory (complementary, analogous, neutral harmonies) to recommend owner clothing colours that make the animal's ${coat} look its best in a portrait photo.
 
