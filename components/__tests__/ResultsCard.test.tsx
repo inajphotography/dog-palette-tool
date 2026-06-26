@@ -12,7 +12,8 @@ jest.mock('next/image', () => ({
 }))
 
 const MOCK_RESULT: PaletteResult = {
-  multiDogDetected: false,
+  detectedAnimal: 'dog',
+  multiSubjectDetected: false,
   wear: [
     { hex: '#8A9A7B', name: 'Sage Green', description: 'Complements golden tones' },
     { hex: '#6B8BA4', name: 'Slate Blue', description: 'Cool contrast' },
@@ -45,15 +46,15 @@ describe('ResultsCard', () => {
     expect(screen.getByText('Natural textures work beautifully. Avoid busy patterns.')).toBeInTheDocument()
   })
 
-  it('does not show multi-dog warning when multiDogDetected is false', () => {
+  it('does not show multi-subject warning when multiSubjectDetected is false', () => {
     render(<ResultsCard result={MOCK_RESULT} imageSrc={mockImageSrc} onReset={mockOnReset} />)
-    expect(screen.queryByTestId('multi-dog-warning')).not.toBeInTheDocument()
+    expect(screen.queryByTestId('multi-subject-warning')).not.toBeInTheDocument()
   })
 
-  it('shows multi-dog warning when multiDogDetected is true', () => {
-    const multiDogResult = { ...MOCK_RESULT, multiDogDetected: true }
-    render(<ResultsCard result={multiDogResult} imageSrc={mockImageSrc} onReset={mockOnReset} />)
-    expect(screen.getByTestId('multi-dog-warning')).toBeInTheDocument()
+  it('shows multi-subject warning worded with the detected animal', () => {
+    const multi = { ...MOCK_RESULT, multiSubjectDetected: true }
+    render(<ResultsCard result={multi} imageSrc={mockImageSrc} onReset={mockOnReset} />)
+    expect(screen.getByTestId('multi-subject-warning')).toBeInTheDocument()
     expect(screen.getByText(/more than one dog/i)).toBeInTheDocument()
   })
 

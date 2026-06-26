@@ -6,6 +6,7 @@ import { ColourSwatch } from './ColourSwatch'
 import { DownloadButton } from './DownloadButton'
 import { config } from '@/photographer.config'
 import type { PaletteResult } from '@/lib/types'
+import { subjects, displayNoun, displayNounPlural, subjectByNoun } from '@/lib/subjects'
 
 interface ResultsCardProps {
   result: PaletteResult
@@ -17,24 +18,30 @@ export function ResultsCard({ result, imageSrc, onReset }: ResultsCardProps) {
   const cardRef = useRef<HTMLDivElement>(null)
   const [isPortrait, setIsPortrait] = useState(false)
 
+  const detected = subjectByNoun(subjects, result.detectedAnimal)
+  const warnNoun = detected?.noun ?? displayNoun
+  const warnNounPlural = detected?.nounPlural ?? displayNounPlural
+  const warnCoat = detected?.coatWord ?? 'coat'
+  const altNoun = detected?.noun ?? displayNoun
+
   return (
     <div className="min-h-screen bg-brand-ivory-light flex flex-col items-center py-6 px-4">
-      {result.multiDogDetected && (
+      {result.multiSubjectDetected && (
         <div
           className="w-full max-w-md bg-amber-50 border border-amber-200 rounded-xl p-3 mb-4 text-sm text-amber-800"
-          data-testid="multi-dog-warning"
+          data-testid="multi-subject-warning"
         >
-          <strong>Heads up:</strong> We spotted more than one dog in this photo. Your palette is based on the most prominent coat. For best results, upload a photo of one dog.
+          <strong>Heads up:</strong> We spotted more than one {warnNoun} in this photo. Your palette is based on the most prominent {warnCoat}. For best results, upload a photo of one {warnNoun}.
         </div>
       )}
 
-      {/* Downloadable card — html2canvas captures this ref */}
+      {/* Downloadable card: html2canvas captures this ref */}
       <div ref={cardRef} className="w-full max-w-md bg-white rounded-2xl overflow-hidden shadow-lg">
         {/* Dog photo with overlay swatches */}
         <div className={`relative w-full bg-brand-dark ${isPortrait ? 'aspect-[3/4]' : 'h-72'}`}>
           <Image
             src={imageSrc}
-            alt="Your dog"
+            alt={`Your ${altNoun}`}
             fill
             className="object-cover object-top"
             onLoad={(e) => {
@@ -80,7 +87,7 @@ export function ResultsCard({ result, imageSrc, onReset }: ResultsCardProps) {
         </div>
       </div>
 
-      {/* Action buttons — outside cardRef, not included in PNG */}
+      {/* Action buttons: outside cardRef, not included in PNG */}
       <div className="flex gap-3 w-full max-w-md mt-4">
         <DownloadButton cardRef={cardRef} />
         <a
