@@ -8,6 +8,8 @@ export const config = {
   },
   subjects: [
     { noun: "dog", nounPlural: "dogs", coatWord: "coat" },
+    { noun: "cat", nounPlural: "cats", coatWord: "fur" },
+    { noun: "horse", nounPlural: "horses", coatWord: "coat" },
   ],
   collectiveNoun: "animal",
   branding: {
@@ -25,10 +27,10 @@ export const config = {
   },
   copy: {
     pageTitle: "What to Wear for Your Session",
-    pageSubtitle: "Upload a photo of your dog and we'll create a personalised colour palette for your photography session.",
+    pageSubtitle: "Upload a photo of your animal and we'll create a personalised colour palette for your photography session.",
     uploadGuidelines: [
-      "Clear photo of your dog in natural light",
-      "One dog only for the most accurate palette",
+      "Clear photo of your animal in natural light",
+      "One animal only for the most accurate palette",
       "Face and coat clearly visible",
     ],
     privacyNote: "Your photo isn't stored after analysis",

@@ -1,6 +1,7 @@
 import { render, screen, waitFor } from '@testing-library/react'
 import userEvent from '@testing-library/user-event'
 import Home from '../page'
+import { displayNoun } from '@/lib/subjects'
 
 jest.mock('@/components/UploadScreen', () => ({
   UploadScreen: ({ onUpload }: { onUpload: (b: string, m: string) => void }) => (
@@ -87,7 +88,9 @@ describe('Home page state machine', () => {
     await userEvent.click(screen.getByText('Upload'))
 
     await waitFor(() => {
-      expect(screen.getByText(/couldn't detect a dog/i)).toBeInTheDocument()
+      expect(
+        screen.getByText(new RegExp(`couldn't detect a ${displayNoun}`, 'i')),
+      ).toBeInTheDocument()
     })
   })
 

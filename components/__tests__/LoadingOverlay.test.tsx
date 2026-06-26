@@ -1,5 +1,6 @@
 import { render, screen } from '@testing-library/react'
 import { LoadingOverlay } from '../LoadingOverlay'
+import { displayNoun } from '@/lib/subjects'
 
 describe('LoadingOverlay', () => {
   it('renders a spinner element', () => {
@@ -14,7 +15,7 @@ describe('LoadingOverlay', () => {
 
   it('shows a colouring message worded from the configured species', () => {
     render(<LoadingOverlay />)
-    // default config species is "dog"
-    expect(screen.getByTestId('loading-message').textContent).toMatch(/dog/i)
+    // worded from config: displayNoun is the single species, or the collective noun when multi-species
+    expect(screen.getByTestId('loading-message').textContent).toContain(displayNoun)
   })
 })
