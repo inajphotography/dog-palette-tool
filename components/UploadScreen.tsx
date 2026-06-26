@@ -5,9 +5,9 @@ import { useState, useRef } from 'react'
 import { config } from '@/photographer.config'
 import type { MediaType } from '@/lib/types'
 
-const MAX_FILE_SIZE = 50 * 1024 * 1024 // 50MB — we resize before sending
+const MAX_FILE_SIZE = 50 * 1024 * 1024 // 50MB, we resize before sending
 const MAX_DIMENSION = 1200 // resize to max 1200px on longest side
-// Accept any image the browser can decode — includes HEIC on iOS (browser converts it)
+// Accept any image the browser can decode, includes HEIC on iOS (browser converts it)
 const ACCEPT = 'image/*'
 
 interface UploadScreenProps {
