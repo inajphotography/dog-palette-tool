@@ -1,5 +1,7 @@
 This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
 
+Supports dogs, cats, and horses. Set the species in `photographer.config.ts` under `subjects`; a deployment can serve one species or several, auto-detecting the animal in each photo.
+
 ## Getting Started
 
 First, run the development server:

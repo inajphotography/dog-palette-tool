@@ -29,6 +29,22 @@ Update every field:
 - copy.pageTitle, copy.pageSubtitle, copy.uploadGuidelines: Your own copy
 - headingFont, bodyFont: Google Fonts names (must be available on fonts.google.com. Update layout.tsx import too)
 
+### 3b. Choose your animal(s)
+
+In `photographer.config.ts`, set `subjects` to the species you photograph. Each entry has a singular noun, a plural, and the word for its colouring (coat or fur):
+
+```ts
+subjects: [
+  { noun: "dog",   nounPlural: "dogs",   coatWord: "coat" },
+  { noun: "cat",   nounPlural: "cats",   coatWord: "fur"  },
+  { noun: "horse", nounPlural: "horses", coatWord: "coat" },
+],
+collectiveNoun: "animal",
+```
+
+- Shoot one species? List just that one. The whole tool speaks that animal, for example "your cat's fur".
+- Shoot more than one? List them all. The tool auto-detects which animal is in each uploaded photo. `collectiveNoun` (default "animal", or use "pet") is the neutral word shown before analysis. Write your upload `pageSubtitle` and `uploadGuidelines` in neutral terms too.
+
 ### 4. Add your Anthropic API key to Vercel
 
 In your Vercel project settings, go to Environment Variables and add:
