@@ -15,7 +15,8 @@ export interface ColourAvoid {
 }
 
 export interface PaletteResult {
-  multiDogDetected: boolean
+  detectedAnimal: string
+  multiSubjectDetected: boolean
   wear: ColourSwatch[]
   avoid: ColourAvoid[]
   guidance: string

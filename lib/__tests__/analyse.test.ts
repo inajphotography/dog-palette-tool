@@ -22,7 +22,8 @@ import { analyseImage } from '../analyse'
 const mockCreate: jest.Mock = (jest.requireMock('@anthropic-ai/sdk') as any).__mockCreate
 
 const MOCK_RESULT = {
-  multiDogDetected: false,
+  detectedAnimal: 'dog',
+  multiSubjectDetected: false,
   wear: [
     { hex: '#8A9A7B', name: 'Sage Green', description: 'Complements warm golden tones' },
     { hex: '#6B8BA4', name: 'Slate Blue', description: 'Provides cool contrast' },
@@ -43,28 +44,29 @@ describe('analyseImage', () => {
 
     const result = await analyseImage('base64data', 'image/jpeg')
 
-    expect(result.multiDogDetected).toBe(false)
+    expect(result.multiSubjectDetected).toBe(false)
+    expect(result.detectedAnimal).toBe('dog')
     expect(result.wear).toHaveLength(2)
     expect(result.wear[0].hex).toBe('#8A9A7B')
     expect(result.avoid).toHaveLength(1)
     expect(result.guidance).toBe('Natural textures work beautifully. Avoid busy patterns and logos.')
   })
 
-  it('sets multiDogDetected true when multiple dogs are present', async () => {
+  it('sets multiSubjectDetected true when multiple animals are present', async () => {
     mockCreate.mockResolvedValue({
-      content: [{ type: 'text', text: JSON.stringify({ ...MOCK_RESULT, multiDogDetected: true }) }],
+      content: [{ type: 'text', text: JSON.stringify({ ...MOCK_RESULT, multiSubjectDetected: true }) }],
     })
 
     const result = await analyseImage('base64data', 'image/jpeg')
-    expect(result.multiDogDetected).toBe(true)
+    expect(result.multiSubjectDetected).toBe(true)
   })
 
-  it('throws no_dog when Claude cannot find a dog', async () => {
+  it('throws no_subject when Claude cannot find the animal', async () => {
     mockCreate.mockResolvedValue({
-      content: [{ type: 'text', text: JSON.stringify({ error: 'no_dog' }) }],
+      content: [{ type: 'text', text: JSON.stringify({ error: 'no_subject' }) }],
     })
 
-    await expect(analyseImage('base64data', 'image/jpeg')).rejects.toThrow('no_dog')
+    await expect(analyseImage('base64data', 'image/jpeg')).rejects.toThrow('no_subject')
   })
 
   it('throws api_error when the response is not valid JSON', async () => {

@@ -1,38 +1,10 @@
 import Anthropic from '@anthropic-ai/sdk'
 import type { PaletteResult, MediaType } from './types'
+import { config } from '@/photographer.config'
+import { buildSystemPrompt } from './prompt'
+import type { Subject } from './subjects'
 
-const SYSTEM_PROMPT = `You are a professional photography session colour stylist.
-
-YOUR ONLY JOB: Look at the dog's fur and coat colour. Recommend clothing colours for the dog's human owner that will complement the dog's fur in a photo.
-
-CRITICAL — what to analyse:
-- ONLY the dog's actual fur/coat colour, dominant tones, and undertones
-
-CRITICAL — what to completely ignore (these must NEVER influence your recommendations):
-- The background (grass, leaves, walls, sky, floors, studios)
-- Anything the dog is sitting on or near (blankets, beds, rugs, grass)
-- Anything around the dog (props, toys, food, birthday cakes, plates, decorations)
-- Anything the dog is wearing (collars, bandanas, bows, hats, clothing)
-- The lighting colour or any colour cast in the photo
-
-The avoid list must ONLY contain colours that clash with the dog's fur — not colours that appear elsewhere in the photo.
-
-Apply colour theory (complementary, analogous, neutral harmonies) to recommend owner clothing colours that make the dog's coat look its best in a portrait photo.
-
-Respond with raw JSON only. No markdown, no code fences:
-{
-  "multiDogDetected": boolean,
-  "wear": [{ "hex": "#RRGGBB", "name": "Colour Name", "description": "Why this works with the dog's coat" }],
-  "avoid": [{ "hex": "#RRGGBB", "name": "Colour Name", "reason": "Why this clashes with the dog's coat" }],
-  "guidance": "2-3 sentences on texture, pattern, and fit for photographing alongside this specific dog."
-}
-
-Rules:
-- Return 5-6 items in wear
-- Return 3-4 items in avoid
-- If no dog is visible, return: {"error": "no_dog"}
-- If multiple dogs, set multiDogDetected to true and base palette on the most prominent dog
-- All hex codes must be valid 6-character hex values starting with #`
+const SYSTEM_PROMPT = buildSystemPrompt(config.subjects as readonly Subject[])
 
 export async function analyseImage(
   base64Image: string,
@@ -64,7 +36,7 @@ export async function analyseImage(
             },
             {
               type: 'text',
-              text: 'Analyse this dog photo and return the JSON palette response.',
+              text: 'Analyse this photo and return the JSON palette response.',
             },
           ],
         },
@@ -85,15 +57,15 @@ export async function analyseImage(
       throw new Error('api_error')
     }
 
-    if (parsed.error === 'no_dog') {
-      throw new Error('no_dog')
+    if (parsed.error === 'no_subject') {
+      throw new Error('no_subject')
     }
 
     return parsed as unknown as PaletteResult
   } catch (error) {
     if (
       error instanceof Error &&
-      (error.message === 'no_dog' || error.message === 'api_error')
+      (error.message === 'no_subject' || error.message === 'api_error')
     ) {
       throw error
     }
