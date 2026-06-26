@@ -1,9 +1,10 @@
 'use client'
 
 import { useEffect, useState } from 'react'
+import { displayNoun } from '@/lib/subjects'
 
 const MESSAGES = [
-  "Analysing your dog's colouring...",
+  `Analysing your ${displayNoun}'s colouring...`,
   'Building your personalised palette...',
   'Almost ready...',
 ]

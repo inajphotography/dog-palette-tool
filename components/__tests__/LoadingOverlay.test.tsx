@@ -11,4 +11,10 @@ describe('LoadingOverlay', () => {
     render(<LoadingOverlay />)
     expect(screen.getByTestId('loading-message')).toBeInTheDocument()
   })
+
+  it('shows a colouring message worded from the configured species', () => {
+    render(<LoadingOverlay />)
+    // default config species is "dog"
+    expect(screen.getByTestId('loading-message').textContent).toMatch(/dog/i)
+  })
 })
