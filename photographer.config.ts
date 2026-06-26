@@ -6,6 +6,10 @@ export const config = {
     ctaLabel: "Back to your session guide",
     ctaUrl: "https://inajphotography.com/session-guide",
   },
+  subjects: [
+    { noun: "dog", nounPlural: "dogs", coatWord: "coat" },
+  ],
+  collectiveNoun: "animal",
   branding: {
     coralRed: "#CA5E3C",
     darkGreen: "#232817",
