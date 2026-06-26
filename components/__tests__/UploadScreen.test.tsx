@@ -40,14 +40,14 @@ describe('UploadScreen', () => {
     expect(screen.getByRole('button', { name: /create my palette/i })).not.toBeDisabled()
   })
 
-  it('shows a size error and keeps button disabled when file exceeds 10MB', async () => {
+  it('shows a size error and keeps button disabled when file exceeds 50MB', async () => {
     render(<UploadScreen onUpload={mockOnUpload} />)
 
-    const largeFile = new File([new ArrayBuffer(11 * 1024 * 1024)], 'big.jpg', { type: 'image/jpeg' })
+    const largeFile = new File([new ArrayBuffer(51 * 1024 * 1024)], 'big.jpg', { type: 'image/jpeg' })
     const input = screen.getByTestId('file-input')
     await userEvent.upload(input, largeFile)
 
-    expect(screen.getByText(/file must be under 10mb/i)).toBeInTheDocument()
+    expect(screen.getByText(/file must be under 50mb/i)).toBeInTheDocument()
     expect(screen.getByRole('button', { name: /create my palette/i })).toBeDisabled()
   })
 })

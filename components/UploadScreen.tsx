@@ -160,7 +160,7 @@ export function UploadScreen({ onUpload }: UploadScreenProps) {
 
           {sizeError && (
             <p className="text-sm text-red-600 text-center mb-3">
-              File must be under 10MB. Please choose a smaller image.
+              File must be under 50MB. Please choose a smaller image.
             </p>
           )}
 
