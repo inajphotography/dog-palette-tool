@@ -22,7 +22,8 @@ jest.mock('@/components/ResultsCard', () => ({
 }))
 
 const MOCK_RESULT = {
-  multiDogDetected: false,
+  detectedAnimal: 'dog',
+  multiSubjectDetected: false,
   wear: [{ hex: '#8A9A7B', name: 'Sage', description: 'Nice' }],
   avoid: [{ hex: '#E74C3C', name: 'Red', reason: 'Bad' }],
   guidance: 'Wear natural textures.',
@@ -76,10 +77,10 @@ describe('Home page state machine', () => {
     expect(screen.getByText('Upload')).toBeInTheDocument()
   })
 
-  it('shows no_dog error message when API returns 422', async () => {
+  it('shows no_subject error message when API returns 422', async () => {
     ;(global.fetch as jest.Mock).mockResolvedValue({
       ok: false,
-      json: async () => ({ error: 'no_dog' }),
+      json: async () => ({ error: 'no_subject' }),
     })
 
     render(<Home />)

@@ -5,10 +5,10 @@ import { UploadScreen } from '@/components/UploadScreen'
 import { LoadingOverlay } from '@/components/LoadingOverlay'
 import { ResultsCard } from '@/components/ResultsCard'
 import type { AppState, MediaType, PaletteResult } from '@/lib/types'
+import { displayNoun } from '@/lib/subjects'
 
 const ERROR_MESSAGES: Record<string, string> = {
-  no_dog:
-    "We couldn't detect a dog in this photo. Try a clearer photo with your dog's face and coat visible.",
+  no_subject: `We couldn't detect a ${displayNoun} in this photo. Try a clearer photo with the ${displayNoun} clearly visible.`,
   api_error: 'Something went wrong. Please try again.',
   invalid_image:
     "That image format isn't supported. Please use a JPG, PNG, or WebP.",
