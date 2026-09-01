@@ -3,7 +3,9 @@
 import Image from 'next/image'
 import { useState, useRef } from 'react'
 import { config } from '@/photographer.config'
-import type { MediaType } from '@/lib/types'
+import { IntakeQuestions } from './IntakeQuestions'
+import { locationById } from '@/lib/locations'
+import type { MediaType, Intake } from '@/lib/types'
 
 const MAX_FILE_SIZE = 50 * 1024 * 1024 // 50MB, we resize before sending
 const MAX_DIMENSION = 1200 // resize to max 1200px on longest side
@@ -11,8 +13,10 @@ const MAX_DIMENSION = 1200 // resize to max 1200px on longest side
 const ACCEPT = 'image/*'
 
 interface UploadScreenProps {
-  onUpload: (base64: string, mediaType: MediaType) => void
+  onUpload: (base64: string, mediaType: MediaType, intake: Intake) => void
 }
+
+const EMPTY_INTAKE: Intake = { undertone: 'unsure', wardrobe: [], locationId: '' }
 
 function resizeAndEncode(file: File): Promise<{ base64: string; mediaType: MediaType }> {
   return new Promise((resolve, reject) => {
@@ -50,6 +54,7 @@ function resizeAndEncode(file: File): Promise<{ base64: string; mediaType: Media
 
 export function UploadScreen({ onUpload }: UploadScreenProps) {
   const [selectedFile, setSelectedFile] = useState<File | null>(null)
+  const [intake, setIntake] = useState<Intake>(EMPTY_INTAKE)
   const [sizeError, setSizeError] = useState(false)
   const inputRef = useRef<HTMLInputElement>(null)
 
@@ -68,13 +73,17 @@ export function UploadScreen({ onUpload }: UploadScreenProps) {
     setSelectedFile(file)
   }
 
+  const needsBackdrop =
+    locationById(intake.locationId)?.kind === 'studio' && !intake.backdropId
+  const canSubmit = Boolean(selectedFile) && !needsBackdrop
+
   async function handleSubmit(e: React.FormEvent) {
     e.preventDefault()
     if (!selectedFile) return
 
     try {
       const { base64, mediaType } = await resizeAndEncode(selectedFile)
-      onUpload(base64, mediaType)
+      onUpload(base64, mediaType, intake)
     } catch {
       // fallback: send as-is if canvas resize fails
       const reader = new FileReader()
@@ -82,7 +91,7 @@ export function UploadScreen({ onUpload }: UploadScreenProps) {
         const dataUrl = event.target?.result as string
         const [header, base64] = dataUrl.split(',')
         const mediaType = (header.split(':')[1].split(';')[0] || 'image/jpeg') as MediaType
-        onUpload(base64, mediaType)
+        onUpload(base64, mediaType, intake)
       }
       reader.readAsDataURL(selectedFile)
     }
@@ -158,6 +167,10 @@ export function UploadScreen({ onUpload }: UploadScreenProps) {
             data-testid="file-input"
           />
 
+          <div className="mb-5">
+            <IntakeQuestions value={intake} onChange={setIntake} />
+          </div>
+
           {sizeError && (
             <p className="text-sm text-red-600 text-center mb-3">
               File must be under 50MB. Please choose a smaller image.
@@ -166,11 +179,17 @@ export function UploadScreen({ onUpload }: UploadScreenProps) {
 
           <button
             type="submit"
-            disabled={!selectedFile}
+            disabled={!canSubmit}
             className="w-full bg-brand-coral text-brand-ivory-light py-3 rounded-xl font-bold text-sm tracking-wide disabled:opacity-40 disabled:cursor-not-allowed hover:bg-opacity-90 transition-all"
           >
-            Create my palette
+            Show me what to wear
           </button>
+
+          {needsBackdrop && (
+            <p className="text-xs text-brand-coral text-center mt-2">
+              Choose your studio backdrop to continue.
+            </p>
+          )}
         </form>
 
         <p className="text-xs text-brand-light-green mt-4 text-center">

@@ -4,7 +4,7 @@ import { useState } from 'react'
 import { UploadScreen } from '@/components/UploadScreen'
 import { LoadingOverlay } from '@/components/LoadingOverlay'
 import { ResultsCard } from '@/components/ResultsCard'
-import type { AppState, MediaType, PaletteResult } from '@/lib/types'
+import type { AppState, MediaType, PaletteResult, Intake } from '@/lib/types'
 import { displayNoun } from '@/lib/subjects'
 
 const ERROR_MESSAGES: Record<string, string> = {
@@ -13,6 +13,9 @@ const ERROR_MESSAGES: Record<string, string> = {
   invalid_image:
     "That image format isn't supported. Please use a JPG, PNG, or WebP.",
   image_too_large: 'That image is too large. Please use a photo under about 5MB.',
+  missing_backdrop: 'Please choose a backdrop for your studio session.',
+  invalid_intake: "Something in your answers wasn't recognised. Please try again.",
+  forbidden: 'This tool cannot be used from here.',
   rate_limited: "You've tried a few times quickly. Please wait a minute and try again.",
 }
 
@@ -21,16 +24,18 @@ export default function Home() {
   const [result, setResult] = useState<PaletteResult | null>(null)
   const [imageSrc, setImageSrc] = useState<string | null>(null)
   const [error, setError] = useState<string | null>(null)
+  const [subjectName, setSubjectName] = useState<string | undefined>(undefined)
 
-  async function handleUpload(base64: string, mediaType: MediaType) {
+  async function handleUpload(base64: string, mediaType: MediaType, intake: Intake) {
     setState('loading')
     setError(null)
+    setSubjectName(intake.subjectName?.trim() || undefined)
 
     try {
       const response = await fetch('/api/analyse', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ base64, mediaType }),
+        body: JSON.stringify({ base64, mediaType, intake }),
       })
 
       const json = await response.json()
@@ -59,7 +64,7 @@ export default function Home() {
   }
 
   if (state === 'loading') {
-    return <LoadingOverlay />
+    return <LoadingOverlay subjectName={subjectName} />
   }
 
   if (state === 'results' && result && imageSrc) {

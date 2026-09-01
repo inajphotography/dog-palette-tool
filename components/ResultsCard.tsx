@@ -2,8 +2,9 @@
 
 import Image from 'next/image'
 import { useRef, useState } from 'react'
-import { ColourSwatch } from './ColourSwatch'
 import { DownloadButton } from './DownloadButton'
+import { WearPalette } from './WearPalette'
+import { HowToWearIt } from './HowToWearIt'
 import { config } from '@/photographer.config'
 import type { PaletteResult } from '@/lib/types'
 import { subjects, displayNoun, displayNounPlural, subjectByNoun } from '@/lib/subjects'
@@ -50,11 +51,26 @@ export function ResultsCard({ result, imageSrc, onReset }: ResultsCardProps) {
             }}
             unoptimized
           />
-          <div className="absolute top-3 left-1/2 -translate-x-1/2 flex gap-2 bg-brand-dark bg-opacity-50 backdrop-blur-sm px-3 py-2 rounded-full">
-            {result.wear.slice(0, 5).map((swatch) => (
+          <div className="absolute top-3 left-1/2 -translate-x-1/2 flex gap-2 items-center bg-brand-dark bg-opacity-50 backdrop-blur-sm px-3 py-2 rounded-full">
+            <span className="text-[0.53rem] font-bold tracking-widest uppercase text-brand-pink mr-0.5">
+              Wear
+            </span>
+            {result.wear.map((swatch) => (
               <div
-                key={swatch.hex}
-                className="w-6 h-6 rounded-full border-2 border-white shadow-sm"
+                key={swatch.hex + swatch.name}
+                className="w-5 h-5 rounded-full border-2 border-white shadow-sm"
+                style={{ backgroundColor: swatch.hex }}
+              />
+            ))}
+          </div>
+          <div className="absolute bottom-3 left-1/2 -translate-x-1/2 flex gap-2 items-center bg-brand-dark bg-opacity-50 backdrop-blur-sm px-3 py-2 rounded-full">
+            <span className="text-[0.53rem] font-bold tracking-widest uppercase text-brand-pink mr-0.5">
+              Avoid
+            </span>
+            {result.avoid.map((swatch) => (
+              <div
+                key={swatch.hex + swatch.name}
+                className="w-4 h-4 rounded-full border-2 border-white/60"
                 style={{ backgroundColor: swatch.hex }}
               />
             ))}
@@ -62,34 +78,17 @@ export function ResultsCard({ result, imageSrc, onReset }: ResultsCardProps) {
         </div>
 
         {/* Palette content */}
-        <div className="p-5">
-          <p className="text-xs font-bold text-brand-coral uppercase tracking-wider mb-3">
-            Wear These
-          </p>
-          <div className="flex gap-3 flex-wrap mb-5">
-            {result.wear.map((swatch) => (
-              <ColourSwatch key={swatch.hex} hex={swatch.hex} name={swatch.name} variant="wear" />
-            ))}
-          </div>
+        <div className="p-4">
+          {result.detectedBreed && (
+            <p className="text-[0.68rem] text-brand-light-green text-center mb-3 tracking-wide">
+              <b className="text-brand-brown">{result.detectedBreed}</b>
+              {result.coat?.primary ? ` · ${result.coat.primary}` : ''}
+            </p>
+          )}
 
-          <p className="text-xs font-bold text-brand-light-green uppercase tracking-wider mb-3">
-            Avoid These
-          </p>
-          <div className="flex gap-3 flex-wrap mb-5">
-            {result.avoid.map((swatch) => (
-              <ColourSwatch key={swatch.hex} hex={swatch.hex} name={swatch.name} variant="avoid" />
-            ))}
-          </div>
-
-          <div className="border-t border-brand-ivory pt-4 flex flex-col gap-2">
-            {result.howToWear.map((line) => (
-              <div key={line.label} className="flex flex-col">
-                <span className="text-[0.57rem] tracking-widest uppercase text-brand-teal font-bold">
-                  {line.label}
-                </span>
-                <span className="text-[0.78rem] text-brand-dark leading-snug">{line.text}</span>
-              </div>
-            ))}
+          <div className="flex flex-col gap-4">
+            <WearPalette wear={result.wear} avoid={result.avoid} />
+            <HowToWearIt lines={result.howToWear} />
           </div>
         </div>
       </div>

@@ -27,7 +27,7 @@ describe('UploadScreen', () => {
 
   it('keeps the submit button disabled until a file is selected', () => {
     render(<UploadScreen onUpload={mockOnUpload} />)
-    expect(screen.getByRole('button', { name: /create my palette/i })).toBeDisabled()
+    expect(screen.getByRole('button', { name: /show me what to wear/i })).toBeDisabled()
   })
 
   it('enables the submit button once a valid file is selected', async () => {
@@ -37,7 +37,7 @@ describe('UploadScreen', () => {
     const input = screen.getByTestId('file-input')
     await userEvent.upload(input, file)
 
-    expect(screen.getByRole('button', { name: /create my palette/i })).not.toBeDisabled()
+    expect(screen.getByRole('button', { name: /show me what to wear/i })).not.toBeDisabled()
   })
 
   it('shows a size error and keeps button disabled when file exceeds 50MB', async () => {
@@ -48,6 +48,6 @@ describe('UploadScreen', () => {
     await userEvent.upload(input, largeFile)
 
     expect(screen.getByText(/file must be under 50mb/i)).toBeInTheDocument()
-    expect(screen.getByRole('button', { name: /create my palette/i })).toBeDisabled()
+    expect(screen.getByRole('button', { name: /show me what to wear/i })).toBeDisabled()
   })
 })

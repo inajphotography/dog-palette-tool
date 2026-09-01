@@ -42,7 +42,7 @@ describe('ResultsCard', () => {
 
   it('renders all avoid colour names', () => {
     render(<ResultsCard result={MOCK_RESULT} imageSrc={mockImageSrc} onReset={mockOnReset} />)
-    expect(screen.getByText('Bright Red')).toBeInTheDocument()
+    expect(screen.getByText('Bright Red.')).toBeInTheDocument()
   })
 
   it('renders the how to wear lines', () => {

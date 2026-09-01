@@ -4,8 +4,19 @@ import Home from '../page'
 import { displayNoun } from '@/lib/subjects'
 
 jest.mock('@/components/UploadScreen', () => ({
-  UploadScreen: ({ onUpload }: { onUpload: (b: string, m: string) => void }) => (
-    <button onClick={() => onUpload('base64data', 'image/jpeg')}>Upload</button>
+  UploadScreen: ({ onUpload }: { onUpload: (b: string, m: string, i: unknown) => void }) => (
+    <button
+      onClick={() =>
+        onUpload('base64data', 'image/jpeg', {
+          undertone: 'unsure',
+          wardrobe: [],
+          locationId: 'yarralumla',
+          subjectName: 'Bella',
+        })
+      }
+    >
+      Upload
+    </button>
   ),
 }))
 
@@ -25,9 +36,10 @@ jest.mock('@/components/ResultsCard', () => ({
 const MOCK_RESULT = {
   detectedAnimal: 'dog',
   multiSubjectDetected: false,
-  wear: [{ hex: '#8A9A7B', name: 'Sage', description: 'Nice' }],
+  coat: { primary: 'warm gold', markings: [], group: 'golden' },
+  wear: [{ hex: '#8A9A7B', name: 'Sage', family: 'dusty-muted', role: 'main' }],
   avoid: [{ hex: '#E74C3C', name: 'Red', reason: 'Bad' }],
-  guidance: 'Wear natural textures.',
+  howToWear: [{ label: 'Texture', text: 'Wear natural textures.' }],
 }
 
 describe('Home page state machine', () => {
