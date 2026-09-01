@@ -79,6 +79,8 @@ Return exactly 4 avoid items and exactly 5 howToWear items, labelled Colours,
 Texture, Fit, Fabric and Leave at home in that order. Each howToWear text is at
 most two short sentences and under 35 words: the instruction, then at most one
 clause of why. Never a paragraph.
+Write about the colours as directions to aim for, never as exact shades they
+have to find. Someone reading this should understand that a nearby tone is fine.
 detectedBreed is optional. Omit it if you are not confident.
 If no animal from the list is visible, return exactly: {"error": "no_subject"}
 All hex codes must be valid six character values starting with #.

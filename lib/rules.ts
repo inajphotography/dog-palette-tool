@@ -32,7 +32,8 @@ Shift the tone, do not ban the family. Never rule out a whole colour family the
 animal happens to wear. Rule out its exact tone and offer a deeper or warmer
 one instead. A corgi's white is chest and legs, a small area, not a frame-wide
 merge risk. Cream stays available; stark white does not. Banning a colour that
-most people already own is useless advice.
+most people already own is useless advice, and it is the fastest way to make the
+whole answer feel unusable.
 
 Six distinct ideas, and they must have range. Never return six shades of the
 same thing: a palette of six warm browns is one idea repeated, even when every
@@ -76,8 +77,14 @@ lightness rather than from bright colour. A muted stone separates as well as a
 jewel tone and stays soft. Rules out black, charcoal and deep navy on a main
 piece.
 
-White or very light: the person goes mid or deep so the fur keeps its detail.
-Rules out white and pale pastels head to toe.
+White or very light: the person usually goes mid or deep so the fur keeps its
+detail. Do not ban white and cream outright though. Nearly everyone owns them,
+and telling someone to avoid the colours already in their wardrobe is useless
+advice. White and cream work here in either of two ways. Worn as one layer among
+others, so the person is not a single pale shape beside a pale dog. Or worn in a
+tone clearly off the dog's own white: an off-cream, an oat, a soft beige, warmer
+or deeper than the coat. What is actually ruled out is a head to toe pale outfit
+in the same white as the coat.
 
 Golden or cream: cool colours separate best, but never on the biggest piece.
 Rules out tan, mustard and warm cream, which merge into the coat.

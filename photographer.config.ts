@@ -101,5 +101,6 @@ export const config = {
       "Face and coat clearly visible",
     ],
     privacyNote: "Your photo isn't stored after analysis",
+    toneNote: "These are the tones to aim for, not exact matches. Anything close to these works.",
   },
 } as const
