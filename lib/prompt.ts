@@ -77,7 +77,8 @@ Family must be one of: neutrals, earthy, rust-spice, jewel, dusty-muted,
 pastels, deep-dark, black-white, denim, brights.
 Return exactly 4 avoid items and exactly 5 howToWear items, labelled Colours,
 Texture, Fit, Fabric and Leave at home in that order. Each howToWear text is at
-most 30 words: the instruction, then at most one clause of why. Not a paragraph.
+most two short sentences and under 35 words: the instruction, then at most one
+clause of why. Never a paragraph.
 detectedBreed is optional. Omit it if you are not confident.
 If no animal from the list is visible, return exactly: {"error": "no_subject"}
 All hex codes must be valid six character values starting with #.
@@ -121,5 +122,6 @@ export function buildReviewPrompt(subjects: readonly Subject[], intake: Intake):
     ].join('\n'),
     'Return the corrected JSON in exactly the same shape, plus a "revisions" array of short strings saying what you changed. If nothing needed changing, return their JSON unchanged with an empty revisions array.',
     SHAPE,
+    'Do your checking silently. Your entire reply must be the JSON object and nothing else. Do not narrate the checks, do not write a preamble, and do not add any commentary after the closing brace. Start your reply with the opening brace.',
   ].join('\n\n')
 }

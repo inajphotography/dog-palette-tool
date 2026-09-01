@@ -34,7 +34,12 @@ one instead. A corgi's white is chest and legs, a small area, not a frame-wide
 merge risk. Cream stays available; stark white does not. Banning a colour that
 most people already own is useless advice.
 
-Six distinct ideas. No two recommended colours may share a family value.
+Six distinct ideas, and they must have range. Never return six shades of the
+same thing: a palette of six warm browns is one idea repeated, even when every
+name is different. Two colours count as the same colour when they sit close on
+the wheel and close in lightness. Include at least one clearly light option and
+one clearly deep one, so the person has a real choice rather than six versions
+of one outfit.
 
 Never recommend a colour that matches the studio backdrop. An accent in the
 backdrop's own colour disappears into it. If you want to echo the backdrop,

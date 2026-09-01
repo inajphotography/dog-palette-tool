@@ -22,6 +22,7 @@ export async function reviewPalette(
     base64,
     mediaType,
     `Here is the proposal to review:\n${JSON.stringify(proposal)}`,
+    4096,
   )
 
   if (parsed.error === 'no_subject') throw new Error('no_subject')

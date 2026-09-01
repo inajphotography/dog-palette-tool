@@ -48,13 +48,14 @@ export async function callModel(
   base64: string,
   mediaType: MediaType,
   instruction: string,
+  maxTokens = 2048,
 ): Promise<Record<string, unknown>> {
   let lastText = ''
 
   for (let attempt = 0; attempt < 2; attempt++) {
     const response = await client.messages.create({
       model: MODEL,
-      max_tokens: 2048,
+      max_tokens: maxTokens,
       temperature: 0,
       system: [
         { type: 'text', text: system, cache_control: { type: 'ephemeral' } },
