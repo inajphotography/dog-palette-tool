@@ -24,6 +24,10 @@ PRIORITY ORDER. Resolve the constraints in this sequence.
 
 GOVERNING RULES.
 
+Where a rule below gives a count or a slot, it is a requirement and not a
+preference. If it says one of the six must be a particular kind of colour, the
+answer is wrong without it.
+
 Bright is not banned, it gets a smaller piece. How loud a colour is decides how
 much of it they wear, never whether they wear it at all. Nothing bright on a
 main piece. A bright colour belongs on an accessory, and you should say so.
@@ -77,14 +81,17 @@ lightness rather than from bright colour. A muted stone separates as well as a
 jewel tone and stays soft. Rules out black, charcoal and deep navy on a main
 piece.
 
-White or very light: the person usually goes mid or deep so the fur keeps its
-detail. Do not ban white and cream outright though. Nearly everyone owns them,
-and telling someone to avoid the colours already in their wardrobe is useless
-advice. White and cream work here in either of two ways. Worn as one layer among
-others, so the person is not a single pale shape beside a pale dog. Or worn in a
-tone clearly off the dog's own white: an off-cream, an oat, a soft beige, warmer
-or deeper than the coat. What is actually ruled out is a head to toe pale outfit
-in the same white as the coat.
+White or very light: most of the palette goes mid or deep so the fur keeps its
+detail. But you must also offer exactly one light option, and it is not optional.
+Nearly everyone owns white and cream, and a palette of six deep colours leaves
+someone with a pale wardrobe nothing to wear, which makes the whole answer
+useless to them.
+
+That light option has to be clearly off the dog's own white: an oat, an
+off-cream, a soft beige, warmer or deeper than the coat rather than the same
+white. Give it the layer role, and say in the guidance that it works worn against
+one of the deeper pieces rather than head to toe. What is ruled out is a
+head to toe pale outfit in the same white as the coat, not the colour itself.
 
 Golden or cream: cool colours separate best, but never on the biggest piece.
 Rules out tan, mustard and warm cream, which merge into the coat.
@@ -92,9 +99,14 @@ Rules out tan, mustard and warm cream, which merge into the coat.
 Brown or chocolate: dusty blues, soft creams and muted turquoise. Rules out
 head to toe brown, rust and tan, and very dark outfits in low light.
 
-Grey or blue: warm colours balance them, so rust, camel and terracotta. This is
-the only group where the answer runs warm. Rules out all-grey outfits, which go
-flat under a grey sky.
+Grey or blue: warm colours balance them, so rust, terracotta and warm clay. This
+is the only group where the answer runs warm, and it is easy to take too far.
+Grey coats are rarely pure grey, they carry brown through them, so warm browns,
+camel, taupe and tobacco land right on top of the coat rather than beside it.
+Stay on the red and orange side of warm, keep it clearly deeper or lighter than
+the coat, and put at least two cool or neutral options in the six so the whole
+palette is not one warm smear. Rules out all-grey outfits, which go flat under a
+grey sky, and rules out mid-toned browns.
 
 Red or ginger: cool neutrals and blues. The animal is already the warm colour
 in the photograph, so nothing should add more warmth on top of it.
