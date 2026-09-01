@@ -12,6 +12,8 @@ const ERROR_MESSAGES: Record<string, string> = {
   api_error: 'Something went wrong. Please try again.',
   invalid_image:
     "That image format isn't supported. Please use a JPG, PNG, or WebP.",
+  image_too_large: 'That image is too large. Please use a photo under about 5MB.',
+  rate_limited: "You've tried a few times quickly. Please wait a minute and try again.",
 }
 
 export default function Home() {
