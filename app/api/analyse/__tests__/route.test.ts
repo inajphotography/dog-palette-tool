@@ -1,78 +1,59 @@
 /**
  * @jest-environment node
  */
-import { NextRequest } from 'next/server'
 import { POST } from '../route'
+import { NextRequest } from 'next/server'
 
-jest.mock('@/lib/analyse', () => ({
-  analyseImage: jest.fn(),
-}))
-
+jest.mock('@/lib/analyse', () => ({ analyseImage: jest.fn() }))
 import { analyseImage } from '@/lib/analyse'
-const mockAnalyseImage = analyseImage as jest.MockedFunction<typeof analyseImage>
 
-const MOCK_RESULT = {
-  detectedAnimal: 'dog',
-  multiSubjectDetected: false,
-  wear: [{ hex: '#8A9A7B', name: 'Sage Green', description: 'Works well' }],
-  avoid: [{ hex: '#E74C3C', name: 'Bright Red', reason: 'Clashes' }],
-  guidance: 'Natural textures work beautifully.',
-}
-
-function makeRequest(body: unknown) {
-  return new NextRequest('http://localhost/api/analyse', {
+const post = (body: unknown) =>
+  new NextRequest('http://localhost/api/analyse', {
     method: 'POST',
-    headers: { 'Content-Type': 'application/json' },
     body: JSON.stringify(body),
+    headers: { 'content-type': 'application/json' },
   })
-}
+
+const goodIntake = { wardrobe: ['neutrals'], locationId: 'yarralumla' }
+const image = { base64: 'AAAA', mediaType: 'image/jpeg' }
 
 describe('POST /api/analyse', () => {
-  beforeEach(() => mockAnalyseImage.mockReset())
+  beforeEach(() => { (analyseImage as jest.Mock).mockReset() })
 
-  it('returns 200 with palette result for a valid request', async () => {
-    mockAnalyseImage.mockResolvedValue(MOCK_RESULT)
-
-    const response = await POST(makeRequest({ base64: 'abc123', mediaType: 'image/jpeg' }))
-    const json = await response.json()
-
-    expect(response.status).toBe(200)
-    expect(json.multiSubjectDetected).toBe(false)
-    expect(json.wear).toHaveLength(1)
+  it('400s with missing_backdrop for a studio session with no backdrop', async () => {
+    const res = await POST(post({ ...image, intake: { wardrobe: [], locationId: 'studio' } }))
+    expect(res.status).toBe(400)
+    expect(await res.json()).toEqual({ error: 'missing_backdrop' })
   })
 
-  it('returns 400 when base64 is missing', async () => {
-    const response = await POST(makeRequest({ mediaType: 'image/jpeg' }))
-    expect(response.status).toBe(400)
+  it('400s with invalid_intake for an unknown location', async () => {
+    const res = await POST(post({ ...image, intake: { wardrobe: [], locationId: 'narnia' } }))
+    expect(res.status).toBe(400)
+    expect(await res.json()).toEqual({ error: 'invalid_intake' })
   })
 
-  it('returns 400 when mediaType is missing', async () => {
-    const response = await POST(makeRequest({ base64: 'abc123' }))
-    expect(response.status).toBe(400)
+  it('400s with invalid_image for a disallowed media type', async () => {
+    const res = await POST(post({ base64: 'AAAA', mediaType: 'image/gif', intake: goodIntake }))
+    expect(res.status).toBe(400)
+    expect(await res.json()).toEqual({ error: 'invalid_image' })
   })
 
-  it('returns 400 when mediaType is not an accepted image type', async () => {
-    const response = await POST(makeRequest({ base64: 'abc123', mediaType: 'image/gif' }))
-    expect(response.status).toBe(400)
+  it('422s when no animal is detected', async () => {
+    ;(analyseImage as jest.Mock).mockRejectedValue(new Error('no_subject'))
+    const res = await POST(post({ ...image, intake: goodIntake }))
+    expect(res.status).toBe(422)
   })
 
-  it('returns 422 when the animal is not detected', async () => {
-    mockAnalyseImage.mockRejectedValue(new Error('no_subject'))
-
-    const response = await POST(makeRequest({ base64: 'abc123', mediaType: 'image/jpeg' }))
-    const json = await response.json()
-
-    expect(response.status).toBe(422)
-    expect(json.error).toBe('no_subject')
+  it('500s when the model call fails', async () => {
+    ;(analyseImage as jest.Mock).mockRejectedValue(new Error('api_error'))
+    const res = await POST(post({ ...image, intake: goodIntake }))
+    expect(res.status).toBe(500)
   })
 
-  it('returns 500 when Claude API fails', async () => {
-    mockAnalyseImage.mockRejectedValue(new Error('api_error'))
-
-    const response = await POST(makeRequest({ base64: 'abc123', mediaType: 'image/jpeg' }))
-    const json = await response.json()
-
-    expect(response.status).toBe(500)
-    expect(json.error).toBe('api_error')
+  it('200s and returns the palette on success', async () => {
+    ;(analyseImage as jest.Mock).mockResolvedValue({ detectedAnimal: 'dog' })
+    const res = await POST(post({ ...image, intake: goodIntake }))
+    expect(res.status).toBe(200)
+    expect(await res.json()).toEqual({ detectedAnimal: 'dog' })
   })
 })

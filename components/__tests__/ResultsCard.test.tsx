@@ -14,14 +14,18 @@ jest.mock('next/image', () => ({
 const MOCK_RESULT: PaletteResult = {
   detectedAnimal: 'dog',
   multiSubjectDetected: false,
+  coat: { primary: 'warm gold', markings: [], group: 'golden' },
   wear: [
-    { hex: '#8A9A7B', name: 'Sage Green', description: 'Complements golden tones' },
-    { hex: '#6B8BA4', name: 'Slate Blue', description: 'Cool contrast' },
+    { hex: '#8A9A7B', name: 'Sage Green', family: 'dusty-muted', role: 'main' },
+    { hex: '#6B8BA4', name: 'Slate Blue', family: 'denim', role: 'second' },
   ],
   avoid: [
     { hex: '#E74C3C', name: 'Bright Red', reason: 'Too similar to warm tones' },
   ],
-  guidance: 'Natural textures work beautifully. Avoid busy patterns.',
+  howToWear: [
+    { label: 'Texture', text: 'Natural textures work beautifully.' },
+    { label: 'Leave at home', text: 'Busy patterns.' },
+  ],
 }
 
 const mockOnReset = jest.fn()
@@ -41,9 +45,9 @@ describe('ResultsCard', () => {
     expect(screen.getByText('Bright Red')).toBeInTheDocument()
   })
 
-  it('renders the guidance text', () => {
+  it('renders the how to wear lines', () => {
     render(<ResultsCard result={MOCK_RESULT} imageSrc={mockImageSrc} onReset={mockOnReset} />)
-    expect(screen.getByText('Natural textures work beautifully. Avoid busy patterns.')).toBeInTheDocument()
+    expect(screen.getByText('Natural textures work beautifully.')).toBeInTheDocument()
   })
 
   it('does not show multi-subject warning when multiSubjectDetected is false', () => {

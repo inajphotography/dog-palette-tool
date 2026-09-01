@@ -81,9 +81,16 @@ export function ResultsCard({ result, imageSrc, onReset }: ResultsCardProps) {
             ))}
           </div>
 
-          <p className="text-sm text-brand-brown leading-relaxed border-t border-brand-ivory pt-4">
-            {result.guidance}
-          </p>
+          <div className="border-t border-brand-ivory pt-4 flex flex-col gap-2">
+            {result.howToWear.map((line) => (
+              <div key={line.label} className="flex flex-col">
+                <span className="text-[0.57rem] tracking-widest uppercase text-brand-teal font-bold">
+                  {line.label}
+                </span>
+                <span className="text-[0.78rem] text-brand-dark leading-snug">{line.text}</span>
+              </div>
+            ))}
+          </div>
         </div>
       </div>
 
