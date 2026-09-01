@@ -2,9 +2,10 @@
   "undertone": "warm",
   "skinDepth": 3,
   "wardrobe": [
-    "earthy",
+    "pastels",
+    "dusty-muted",
     "neutrals"
   ],
-  "locationId": "palmerville",
-  "season": "autumn"
+  "locationId": "yarralumla",
+  "season": "spring"
 }

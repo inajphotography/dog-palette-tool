@@ -1,6 +1,10 @@
 {
-  "undertone": "unsure",
-  "wardrobe": [],
+  "undertone": "neutral",
+  "skinDepth": 4,
+  "wardrobe": [
+    "jewel",
+    "deep-dark"
+  ],
   "locationId": "studio",
-  "backdropId": "cream"
+  "backdropId": "bright-yellow"
 }
