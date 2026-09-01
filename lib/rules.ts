@@ -44,10 +44,19 @@ same thing: a palette of six warm browns is one idea repeated, even when every
 name is different. Two colours count as the same colour when they sit close on
 the wheel and close in lightness, so walnut beside mahogany is one colour twice.
 Where a coat group pushes the whole palette one way, as grey coats push it warm,
-that is correct and you should follow it. The six still have to be six different
-colours within that direction: spread them through light, mid and deep so the
-person has a real choice, rather than handing them rust, sienna and brick, which
-is one colour offered three times.
+that is correct and you should follow it. A palette that is entirely warm is not
+a fault.
+
+What is a fault is six versions of one colour, and the way that happens is
+everything landing at the same depth. So space the six evenly from deepest to
+lightest, and this is a requirement rather than a preference. Think of it as six
+rungs on a ladder running from very deep to clearly light, with a real step
+between each rung. No two of the six may sit at the same depth.
+
+Rust, sienna, brick and ochre are the same colour four times, because they are
+all warm and all sitting at the same depth. Espresso, brick, clay, caramel and
+oat are different colours in the same warm family, because each one is a clear
+step lighter than the one before it.
 
 Never recommend a colour that matches the studio backdrop. An accent in the
 backdrop's own colour disappears into it. If you want to echo the backdrop,

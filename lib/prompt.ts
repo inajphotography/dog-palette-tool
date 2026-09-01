@@ -71,8 +71,13 @@ Respond with raw JSON only. No markdown, no code fences.
 
 RULES FOR THE SHAPE.
 Return exactly 6 wear items: three with role "main", one "second", one "layer",
-one "accent". The three main colours are alternatives, not three things worn at
-once. No two wear items may share a family.
+one "accent".
+
+The three main colours are alternatives. The person picks one of them, so they
+have to be three genuinely different choices, not three shades of the same idea.
+Give them clearly different depths: one deep, one mid, one lighter. Three dark
+browns in the main slots is one option offered three times, which leaves the
+person no choice at all.
 Family must be one of: neutrals, earthy, rust-spice, jewel, dusty-muted,
 pastels, deep-dark, black-white, denim, brights.
 Return exactly 4 avoid items and exactly 5 howToWear items, labelled Colours,
