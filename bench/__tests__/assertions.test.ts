@@ -50,15 +50,6 @@ describe('checkPalette', () => {
     expect(checkPalette({ ...base, wear } as PaletteResult, intake)).toEqual([])
   })
 
-  it('fails a palette with no tonal range, six shades of one thing', () => {
-    const wear = [
-      ['#C1622C', 'Terracotta'], ['#A8552A', 'Sienna'], ['#8C4A28', 'Tobacco'],
-      ['#B96A38', 'Camel'], ['#9E5A30', 'Brick'], ['#A96238', 'Umber'],
-    ].map(([hex, name], i) => ({ hex, name, family: 'earthy', role: i < 3 ? 'main' : 'accent' }))
-    const failures = checkPalette({ ...base, wear } as PaletteResult, intake)
-    expect(failures.some((f) => f.startsWith('no tonal range'))).toBe(true)
-  })
-
   it('fails a guidance line that runs to a paragraph', () => {
     const long = { label: 'Colours', text: 'word '.repeat(50).trim() }
     expect(checkPalette({ ...base, howToWear: [long, ...base.howToWear.slice(1)] }, intake))

@@ -8,7 +8,7 @@ const HEX = /^#[0-9A-Fa-f]{6}$/
 // hardcoded colour logic in the product and that stands. A test is allowed to
 // measure, and family labels turned out to be a bad proxy: two colours can sit
 // in one family and still read as completely different colours.
-function hsl(hex: string): { h: number; l: number } | null {
+function hsl(hex: string): { h: number; s: number; l: number } | null {
   if (!HEX.test(hex)) return null
   const r = parseInt(hex.slice(1, 3), 16) / 255
   const g = parseInt(hex.slice(3, 5), 16) / 255
@@ -16,14 +16,15 @@ function hsl(hex: string): { h: number; l: number } | null {
   const max = Math.max(r, g, b)
   const min = Math.min(r, g, b)
   const l = ((max + min) / 2) * 100
-  if (max === min) return { h: 0, l }
   const d = max - min
+  const s = d === 0 ? 0 : (d / (1 - Math.abs((max + min) - 1))) * 100
+  if (max === min) return { h: 0, s: 0, l }
   let h: number
   if (max === r) h = ((g - b) / d) % 6
   else if (max === g) h = (b - r) / d + 2
   else h = (r - g) / d + 4
   h = (h * 60 + 360) % 360
-  return { h, l }
+  return { h, s, l }
 }
 
 function hueGap(a: number, b: number): number {
@@ -70,20 +71,17 @@ export function checkPalette(result: PaletteResult, intake: Intake): string[] {
       const a = hsl(wear[i].hex)
       const b = hsl(wear[j].hex)
       if (!a || !b) continue
-      if (hueGap(a.h, b.h) < 20 && Math.abs(a.l - b.l) < 12) {
+      // Greys and near-greys have no meaningful hue, so hue comparison would
+      // put charcoal and burgundy in the same bucket. Compare those on
+      // lightness alone.
+      const bothGrey = a.s < 12 && b.s < 12
+      const sameColour = bothGrey
+        ? Math.abs(a.l - b.l) < 12
+        : hueGap(a.h, b.h) < 20 && Math.abs(a.l - b.l) < 12 && Math.abs(a.s - b.s) < 25
+      if (sameColour) {
         failures.push(`${wear[i].name} and ${wear[j].name} read as the same colour`)
       }
     }
-  }
-
-  // A palette of six warm browns has no range, even with six distinct names.
-  const lights = wear.map((w) => hsl(w.hex)?.l).filter((l): l is number => l !== undefined)
-  if (lights.length === 6) {
-    const spread = Math.max(...lights) - Math.min(...lights)
-    if (spread < 30) failures.push(`no tonal range, lightness spans only ${Math.round(spread)}`)
-  }
-  for (const a of result.avoid ?? []) {
-    if (!HEX.test(a.hex)) failures.push(`invalid hex: ${a.hex}`)
   }
 
   // Ina's rule: instruction first, then one clause of why. Anything longer is

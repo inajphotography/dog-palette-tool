@@ -37,9 +37,12 @@ most people already own is useless advice.
 Six distinct ideas, and they must have range. Never return six shades of the
 same thing: a palette of six warm browns is one idea repeated, even when every
 name is different. Two colours count as the same colour when they sit close on
-the wheel and close in lightness. Include at least one clearly light option and
-one clearly deep one, so the person has a real choice rather than six versions
-of one outfit.
+the wheel and close in lightness, so walnut beside mahogany is one colour twice.
+Where a coat group pushes the whole palette one way, as grey coats push it warm,
+that is correct and you should follow it. The six still have to be six different
+colours within that direction: spread them through light, mid and deep so the
+person has a real choice, rather than handing them rust, sienna and brick, which
+is one colour offered three times.
 
 Never recommend a colour that matches the studio backdrop. An accent in the
 backdrop's own colour disappears into it. If you want to echo the backdrop,
