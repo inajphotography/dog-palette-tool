@@ -43,18 +43,20 @@ async function runCase(slug: string): Promise<BenchCase> {
   const baseline = JSON.parse(readFileSync(join(dir, 'baseline.json'), 'utf8')) as Baseline
   const base64 = readFileSync(join(dir, 'photo.jpg')).toString('base64')
 
-  const runs: CaseRun[] = []
-  for (let i = 0; i < RUNS; i++) {
-    try {
-      const result = await analyseImage(base64, 'image/jpeg' as MediaType, intake)
-      runs.push({ result, failures: checkPalette(result, intake) })
-    } catch (error) {
-      runs.push({
-        failures: ['threw'],
-        error: error instanceof Error ? error.message : String(error),
-      })
-    }
-  }
+  // The three runs of a case are independent, so they go concurrently.
+  const runs = await Promise.all(
+    Array.from({ length: RUNS }, async (): Promise<CaseRun> => {
+      try {
+        const result = await analyseImage(base64, 'image/jpeg' as MediaType, intake)
+        return { result, failures: checkPalette(result, intake) }
+      } catch (error) {
+        return {
+          failures: ['threw'],
+          error: error instanceof Error ? error.message : String(error),
+        }
+      }
+    }),
+  )
   return { slug, intake, baseline, runs }
 }
 
@@ -175,14 +177,25 @@ async function main() {
     process.exit(1)
   }
 
+  // Two cases at a time, three runs each, so six calls in flight. Enough to
+  // finish the full set in minutes without tripping rate limits.
+  const CONCURRENCY = 2
   const cases: BenchCase[] = []
-  for (const slug of slugs) {
-    process.stdout.write(`${slug.padEnd(24)}`)
-    const c = await runCase(slug)
-    const bad = c.runs.filter((r) => r.failures.length).length
-    process.stdout.write(bad ? `${bad}/${RUNS} runs failed assertions\n` : 'clean\n')
-    cases.push(c)
-  }
+  const queue = [...slugs]
+
+  await Promise.all(
+    Array.from({ length: Math.min(CONCURRENCY, queue.length) }, async () => {
+      while (queue.length) {
+        const slug = queue.shift()
+        if (!slug) return
+        const c = await runCase(slug)
+        const bad = c.runs.filter((r) => r.failures.length).length
+        console.log(`${slug.padEnd(24)}${bad ? `${bad}/${RUNS} runs failed assertions` : 'clean'}`)
+        cases.push(c)
+      }
+    }),
+  )
+  cases.sort((a, b) => a.slug.localeCompare(b.slug))
 
   const stamp = new Date().toISOString().slice(0, 16).replace('T', ' ')
   mkdirSync(OUT, { recursive: true })

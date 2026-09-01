@@ -41,6 +41,13 @@ export function checkPalette(result: PaletteResult, intake: Intake): string[] {
     if (!HEX.test(a.hex)) failures.push(`invalid hex: ${a.hex}`)
   }
 
+  // Ina's rule: instruction first, then one clause of why. Anything longer is
+  // a lecture, and she has rejected that phrasing twice.
+  for (const line of result.howToWear ?? []) {
+    const words = line.text.trim().split(/\s+/).length
+    if (words > 32) failures.push(`${line.label} is ${words} words, cap is 30`)
+  }
+
   if (intake.wardrobe.length) {
     // Capped at the number of families they named. Every wear colour has a
     // distinct family, so someone who ticked two chips can never yield three

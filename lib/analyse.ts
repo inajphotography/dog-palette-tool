@@ -9,12 +9,23 @@ import { UNIVERSAL_BANNED } from './rules'
 import { voice } from './locations'
 import type { Subject } from './subjects'
 
+// Identity-linked API keys must name the workspace they act in. Plain keys
+// do not, and sending the header would be harmless either way, so it is set
+// only when the id is configured.
+export function makeClient(): Anthropic {
+  const workspace = process.env.ANTHROPIC_WORKSPACE_ID
+  return new Anthropic({
+    apiKey: process.env.ANTHROPIC_API_KEY,
+    ...(workspace ? { defaultHeaders: { 'anthropic-workspace-id': workspace } } : {}),
+  })
+}
+
 export async function analyseImage(
   base64Image: string,
   mediaType: MediaType,
   intake: Intake,
 ): Promise<PaletteResult> {
-  const client = new Anthropic({ apiKey: process.env.ANTHROPIC_API_KEY })
+  const client = makeClient()
   const banned = [...UNIVERSAL_BANNED, ...voice.bannedPhrases]
   const subjects = config.subjects as readonly Subject[]
 

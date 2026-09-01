@@ -36,6 +36,10 @@ most people already own is useless advice.
 
 Six distinct ideas. No two recommended colours may share a family value.
 
+Never recommend a colour that matches the studio backdrop. An accent in the
+backdrop's own colour disappears into it. If you want to echo the backdrop,
+go several shades deeper than it.
+
 Outfit cap. Two or three colours all up, counting the neutrals.
 
 Solid over pattern, and texture instead of pattern. Fine stripes clash with the

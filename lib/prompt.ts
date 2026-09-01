@@ -76,7 +76,8 @@ once. No two wear items may share a family.
 Family must be one of: neutrals, earthy, rust-spice, jewel, dusty-muted,
 pastels, deep-dark, black-white, denim, brights.
 Return exactly 4 avoid items and exactly 5 howToWear items, labelled Colours,
-Texture, Fit, Fabric and Leave at home in that order.
+Texture, Fit, Fabric and Leave at home in that order. Each howToWear text is at
+most 30 words: the instruction, then at most one clause of why. Not a paragraph.
 detectedBreed is optional. Omit it if you are not confident.
 If no animal from the list is visible, return exactly: {"error": "no_subject"}
 All hex codes must be valid six character values starting with #.
