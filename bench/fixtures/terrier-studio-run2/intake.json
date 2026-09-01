@@ -1,0 +1,11 @@
+{
+  "undertone": "neutral",
+  "skinDepth": 3,
+  "wardrobe": [
+    "neutrals",
+    "dusty-muted"
+  ],
+  "locationId": "studio",
+  "backdropId": "light-blue",
+  "subjectName": "James"
+}

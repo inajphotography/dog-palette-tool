@@ -38,8 +38,9 @@ function personContext(intake: Intake): string {
     intake.undertone === 'unsure'
       ? 'They are not sure of their undertone, so only avoid known clashes rather than steering warm or cool.'
       : `Their undertone is ${intake.undertone}.`
+  const required = Math.min(3, intake.wardrobe.length)
   const wardrobe = intake.wardrobe.length
-    ? `They said they already wear these colour families: ${intake.wardrobe.join(', ')}. At least three of your six colours must come from that list.`
+    ? `They said they already wear these colour families: ${intake.wardrobe.join(', ')}. At least ${required} of your six colours must come from that list.`
     : 'They did not tell us what they wear, so skip the wearability step and do not mention their wardrobe in the output.'
   return `${depth} ${undertone} ${wardrobe}`
 }
