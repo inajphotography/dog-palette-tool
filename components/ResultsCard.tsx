@@ -7,7 +7,7 @@ import { WearPalette } from './WearPalette'
 import { HowToWearIt } from './HowToWearIt'
 import { config } from '@/photographer.config'
 import type { PaletteResult } from '@/lib/types'
-import { subjects, displayNoun, displayNounPlural, subjectByNoun } from '@/lib/subjects'
+import { subjects, displayNoun, subjectByNoun } from '@/lib/subjects'
 
 interface ResultsCardProps {
   result: PaletteResult
@@ -21,7 +21,6 @@ export function ResultsCard({ result, imageSrc, onReset }: ResultsCardProps) {
 
   const detected = subjectByNoun(subjects, result.detectedAnimal)
   const warnNoun = detected?.noun ?? displayNoun
-  const warnNounPlural = detected?.nounPlural ?? displayNounPlural
   const warnCoat = detected?.coatWord ?? 'coat'
   const altNoun = detected?.noun ?? displayNoun
 

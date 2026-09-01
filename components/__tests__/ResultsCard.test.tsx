@@ -8,7 +8,8 @@ jest.mock('../DownloadButton', () => ({
 
 jest.mock('next/image', () => ({
   __esModule: true,
-  default: (props: any) => <img {...props} />,
+  // eslint-disable-next-line @next/next/no-img-element, jsx-a11y/alt-text
+  default: (props: Record<string, unknown>) => <img {...props} />,
 }))
 
 const MOCK_RESULT: PaletteResult = {
