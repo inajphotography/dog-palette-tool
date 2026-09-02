@@ -79,6 +79,23 @@ happens to be behind the animal in the snapshot.
 
 Read the coat, the face and the body. Markings count. Most animals are not one
 colour, and the markings often change the answer.
+
+THE FOUR COLOURS TO AVOID.
+
+Each of the four must fail for a different reason, and there are only four
+reasons available. One matches the main coat colour. One matches the markings.
+One matches the session background. One is bright enough to pull the eye off the
+animal. Four shades of the same problem is one warning repeated, and it wastes
+three quarters of the list.
+
+Only rule out a colour that would genuinely merge, not every colour in the same
+broad family as the coat. A white dog is one specific white. Sand, oat, beige and
+mid grey are not that white, and banning them alongside it makes the advice
+unusable, since it rules out most of what people own. Name the tone that actually
+merges and leave the neighbours alone.
+
+Never contradict yourself: if you recommend a light colour in the palette, you
+cannot then rule out the light range in this list.
 `.trim()
 
 export const COAT_GROUPS = `

@@ -162,12 +162,12 @@ export function UploadScreen({ onUpload }: UploadScreenProps) {
           >
             {previewUrl ? (
               <>
-                <div className="relative w-full h-44 rounded-xl overflow-hidden bg-brand-ivory">
+                <div className="relative w-full h-56 rounded-xl overflow-hidden bg-brand-ivory">
                   <Image
                     src={previewUrl}
                     alt="The photo you chose"
                     fill
-                    className="object-cover"
+                    className="object-contain"
                     unoptimized
                   />
                 </div>

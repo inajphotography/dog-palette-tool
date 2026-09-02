@@ -17,7 +17,7 @@ interface ResultsCardProps {
 
 export function ResultsCard({ result, imageSrc, onReset }: ResultsCardProps) {
   const cardRef = useRef<HTMLDivElement>(null)
-  const [isPortrait, setIsPortrait] = useState(false)
+  const [ratio, setRatio] = useState<number | null>(null)
 
   const detected = subjectByNoun(subjects, result.detectedAnimal)
   const warnNoun = detected?.noun ?? displayNoun
@@ -38,15 +38,18 @@ export function ResultsCard({ result, imageSrc, onReset }: ResultsCardProps) {
       {/* Downloadable card: html2canvas captures this ref */}
       <div ref={cardRef} className="w-full max-w-md bg-white rounded-2xl overflow-hidden shadow-lg">
         {/* Dog photo with overlay swatches */}
-        <div className={`relative w-full bg-brand-dark ${isPortrait ? 'aspect-[3/4]' : 'h-72'}`}>
+        <div
+          className="relative w-full bg-brand-dark"
+          style={{ aspectRatio: ratio ?? 4 / 3, maxHeight: '70vh' }}
+        >
           <Image
             src={imageSrc}
             alt={`Your ${altNoun}`}
             fill
-            className="object-cover object-top"
+            className="object-contain"
             onLoad={(e) => {
               const img = e.currentTarget
-              setIsPortrait(img.naturalHeight > img.naturalWidth)
+              if (img.naturalHeight > 0) setRatio(img.naturalWidth / img.naturalHeight)
             }}
             unoptimized
           />
