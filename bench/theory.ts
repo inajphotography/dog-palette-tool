@@ -108,7 +108,10 @@ function audit(rows: Row[]) {
       satByRole[w.role]?.push(c.s)
       if (w.role === 'main') {
         totalMains++
-        if (c.s > 45) brightMains++
+        // Only a fault if bright is not what they said they wear.
+        const wearsBright =
+          intake.wardrobe.includes('brights') || intake.wardrobe.includes('jewel')
+        if (c.s > 45 && !wearsBright) brightMains++
       }
       console.log(
         `${w.name.padEnd(24)}${w.role.padEnd(9)}${Math.round(c.l).toString().padEnd(6)}${Math.round(c.s).toString().padEnd(6)}${(`${Math.round(dL)}/${Math.round(dE)}` + (ok ? ' ok' : ' THIN')).padEnd(14)}${c.s < 12 ? 'neutral' : relation(c.h, coatWarm)}`,
@@ -127,7 +130,7 @@ function audit(rows: Row[]) {
   console.log(`   ${sepPass}/${sepTotal} colours at a perceptual distance of 25 or more from the coat (${Math.round((100 * sepPass) / sepTotal)}%)`)
   console.log('\n3. Chroma discipline, the original complaint.')
   console.log(`   mean peak saturation per palette: ${avg(maxSats).toFixed(0)}`)
-  console.log(`   bright colours on a main slot: ${brightMains}/${totalMains}`)
+  console.log(`   bright on a main slot where they did NOT say they wear bright: ${brightMains}/${totalMains}`)
 }
 
 async function main() {

@@ -1,6 +1,6 @@
 import type { Subject } from './subjects'
 import type { Intake } from './types'
-import { COLOUR_RULES, COAT_GROUPS, UNIVERSAL_BANNED } from './rules'
+import { COLOUR_THEORY, COLOUR_RULES, COAT_GROUPS, UNIVERSAL_BANNED } from './rules'
 import {
   locationById,
   backdropById,
@@ -70,8 +70,12 @@ Respond with raw JSON only. No markdown, no code fences.
 }
 
 RULES FOR THE SHAPE.
-Return exactly 6 wear items: three with role "main", one "second", one "layer",
-one "accent".
+Return 6 wear items where you can, and 5 when you cannot: three with role
+"main", one "second", one "layer", one "accent". Drop the layer or the second
+if six would mean repeating yourself.
+
+Six is better than five, but five genuinely different colours is much better
+than six where two are the same. Never pad the list to reach six.
 
 The three main colours are alternatives. The person picks one of them, so they
 have to be three genuinely different choices, not three shades of the same idea.
@@ -101,6 +105,7 @@ export function buildAnalysePrompt(subjects: readonly Subject[], intake: Intake)
       : 'You do not know the name of the animal, so refer to them by species.',
     `THE SESSION. ${sessionContext(intake)}`,
     `THE PERSON. ${personContext(intake)}`,
+    COLOUR_THEORY,
     COLOUR_RULES,
     COAT_GROUPS,
     voiceBlock(),
@@ -115,6 +120,7 @@ export function buildReviewPrompt(subjects: readonly Subject[], intake: Intake):
     speciesLine(subjects),
     `THE SESSION. ${sessionContext(intake)}`,
     `THE PERSON. ${personContext(intake)}`,
+    COLOUR_THEORY,
     COLOUR_RULES,
     COAT_GROUPS,
     voiceBlock(),

@@ -55,7 +55,10 @@ export function checkPalette(result: PaletteResult, intake: Intake): string[] {
     }
   }
 
-  if (result.wear?.length !== 6) failures.push(`expected 6 wear, got ${result.wear?.length}`)
+  const wearCount = result.wear?.length ?? 0
+  if (wearCount < 5 || wearCount > 6) {
+    failures.push(`expected 5 or 6 wear, got ${wearCount}`)
+  }
   if (result.avoid?.length !== 4) failures.push(`expected 4 avoid, got ${result.avoid?.length}`)
   if (result.howToWear?.length !== 5) failures.push(`expected 5 howToWear, got ${result.howToWear?.length}`)
 

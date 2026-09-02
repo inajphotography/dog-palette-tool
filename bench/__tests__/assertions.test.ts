@@ -66,6 +66,11 @@ describe('checkPalette', () => {
     expect(checkPalette(base, { ...intake, wardrobe: [] })).toEqual([])
   })
 
+  it('accepts five colours, since five real ones beat six with a repeat', () => {
+    const five = { ...base, wear: GOOD.slice(0, 5) as PaletteResult['wear'] }
+    expect(checkPalette(five, intake)).toEqual([])
+  })
+
   it('fails on the wrong counts', () => {
     expect(checkPalette({ ...base, avoid: base.avoid.slice(0, 2) }, intake)).toContain('expected 4 avoid, got 2')
   })
