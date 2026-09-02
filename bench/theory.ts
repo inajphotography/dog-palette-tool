@@ -88,7 +88,7 @@ function audit(rows: Row[]) {
     const coatWarm = /warm|gold|sable|tan|red|ginger|brown|cream/.test(
       `${result.coat?.primary ?? ''}`.toLowerCase(),
     )
-    const loc = locationById(intake.locationId)
+    const loc = intake.locationId ? locationById(intake.locationId) : undefined
     const bd = intake.backdropId ? backdropById(intake.backdropId) : undefined
 
     console.log(`\n${'='.repeat(76)}`)

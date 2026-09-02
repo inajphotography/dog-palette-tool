@@ -19,8 +19,10 @@ function speciesLine(subjects: readonly Subject[]): string {
 }
 
 function sessionContext(intake: Intake): string {
-  const location = locationById(intake.locationId)
-  if (!location) return 'The session location is unknown.'
+  const location = intake.locationId ? locationById(intake.locationId) : undefined
+  if (!location) {
+    return 'They did not say where the session is. Choose colours that hold up anywhere, and do not mention the location in your writing.'
+  }
   if (location.kind === 'studio') {
     const backdrop = intake.backdropId ? backdropById(intake.backdropId) : undefined
     return backdrop
@@ -61,7 +63,6 @@ const SHAPE = `
 Respond with raw JSON only. No markdown, no code fences.
 {
   "detectedAnimal": "dog",
-  "detectedBreed": "Pembroke Welsh Corgi",
   "multiSubjectDetected": false,
   "coat": { "primary": "warm sable", "markings": ["white chest", "white legs"], "group": "two-tone" },
   "wear": [{ "hex": "#RRGGBB", "name": "Deep Taupe", "family": "neutrals", "role": "main" }],
@@ -90,7 +91,8 @@ most two short sentences and under 35 words: the instruction, then at most one
 clause of why. Never a paragraph.
 Write about the colours as directions to aim for, never as exact shades they
 have to find. Someone reading this should understand that a nearby tone is fine.
-detectedBreed is optional. Omit it if you are not confident.
+Never name the breed. Describe the coat instead. A wrong breed reads worse than
+no breed at all, and it undermines everything else on the card.
 If no animal from the list is visible, return exactly: {"error": "no_subject"}
 All hex codes must be valid six character values starting with #.
 `.trim()

@@ -47,3 +47,23 @@ describe('LoadingOverlay rendering', () => {
     expect(screen.getByTestId('loading-line')).toBeInTheDocument()
   })
 })
+
+describe('LoadingOverlay never stalls', () => {
+  it('keeps changing past the last stage rather than freezing', () => {
+    render(<LoadingOverlay subjectName="Bella" />)
+    const el = screen.getByTestId('loading-line')
+    act(() => { jest.advanceTimersByTime(2600 * 5) })
+    const atEnd = el.textContent
+    act(() => { jest.advanceTimersByTime(2600 * 2) })
+    expect(el.textContent).not.toBe(atEnd)
+  })
+
+  it('is still moving well past the end of one pass', () => {
+    render(<LoadingOverlay />)
+    const el = screen.getByTestId('loading-line')
+    act(() => { jest.advanceTimersByTime(2600 * 11) })
+    const a = el.textContent
+    act(() => { jest.advanceTimersByTime(2600) })
+    expect(el.textContent).not.toBe(a)
+  })
+})

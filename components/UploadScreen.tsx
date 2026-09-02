@@ -8,7 +8,7 @@ import { locationById } from '@/lib/locations'
 import type { MediaType, Intake } from '@/lib/types'
 
 const MAX_FILE_SIZE = 50 * 1024 * 1024 // 50MB, we resize before sending
-const MAX_DIMENSION = 1200 // resize to max 1200px on longest side
+const MAX_DIMENSION = 900 // 900 reads a coat as well as 1200 and is far quicker
 // Accept any image the browser can decode, includes HEIC on iOS (browser converts it)
 const ACCEPT = 'image/*'
 
@@ -83,7 +83,7 @@ export function UploadScreen({ onUpload }: UploadScreenProps) {
   useEffect(() => () => { if (previewUrl) URL.revokeObjectURL(previewUrl) }, [previewUrl])
 
   const needsBackdrop =
-    locationById(intake.locationId)?.kind === 'studio' && !intake.backdropId
+    intake.locationId ? locationById(intake.locationId)?.kind === 'studio' : false && !intake.backdropId
   const canSubmit = Boolean(selectedFile) && !needsBackdrop
 
   async function handleSubmit(e: React.FormEvent) {

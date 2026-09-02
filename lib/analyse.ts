@@ -5,6 +5,7 @@ import { buildAnalysePrompt } from './prompt'
 import { callModel } from './modelCall'
 import { reviewPalette } from './review'
 import { gatePayload } from './textGate'
+import { dedupeWear } from './dedupe'
 import { UNIVERSAL_BANNED } from './rules'
 import { voice } from './locations'
 import type { Subject } from './subjects'
@@ -51,6 +52,14 @@ export async function analyseImage(
     const message = error instanceof Error ? error.message : String(error)
     if (message === 'no_subject') throw error
     console.error('[analyse] review pass failed, shipping pass one:', message)
+  }
+
+  // Last, after both passes: drop any colour that is the same colour as one
+  // already in the palette. Five real options beat six with a repeat.
+  if (Array.isArray(result.wear)) {
+    const { wear, dropped } = dedupeWear(result.wear)
+    if (dropped.length) console.warn('[dedupe]', dropped.join('; '))
+    result = { ...result, wear }
   }
 
   const gated = gatePayload(result, banned)

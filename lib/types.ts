@@ -25,7 +25,7 @@ export interface Intake {
   skinDepth?: number
   undertone: Undertone
   wardrobe: WardrobeFamily[]
-  locationId: string
+  locationId?: string
   backdropId?: string
   season?: Season
 }

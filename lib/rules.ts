@@ -110,6 +110,16 @@ colour is useless advice they will ignore. In that case keep the bright on the
 main piece, choose the version of it that separates best from the coat, and use
 the guidance to say where to place it so the animal still leads.
 
+Black and white are both fine to wear, and most people own plenty of both.
+They are only wrong in three specific places, and nowhere else.
+Never black when the animal is black or very dark. Never black when the studio
+backdrop is black. Never white when the animal is white or very light. In each
+of those the person and the thing behind or beside them become one shape.
+Outside those three, black is a good, wearable colour and you should offer it.
+
+Never recommend a colour that matches the studio backdrop, whatever that
+backdrop is. A person in the backdrop's own colour is a floating head.
+
 White on a main piece has to be toned down. Not stark white, not optic white:
 an off-white, an ivory, a soft oat. The brightest thing in a photograph takes
 the eye, and if the person is wearing it then the person takes the eye. This

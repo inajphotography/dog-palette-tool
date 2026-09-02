@@ -81,10 +81,9 @@ export function ResultsCard({ result, imageSrc, onReset }: ResultsCardProps) {
 
         {/* Palette content */}
         <div className="p-4">
-          {result.detectedBreed && (
+          {result.coat?.primary && (
             <p className="text-[0.68rem] text-brand-light-green text-center mb-3 tracking-wide">
-              <b className="text-brand-brown">{result.detectedBreed}</b>
-              {result.coat?.primary ? ` · ${result.coat.primary}` : ''}
+              {result.coat.primary}
             </p>
           )}
 

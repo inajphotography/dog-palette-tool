@@ -45,19 +45,22 @@ export const STAGES: readonly (readonly string[])[] = [
 const STAGE_MS = 2600
 
 export function LoadingOverlay({ subjectName }: { subjectName?: string }) {
-  const [stage, setStage] = useState(0)
-  const [picks] = useState(() => STAGES.map((v) => Math.floor(Math.random() * v.length)))
+  const [step, setStep] = useState(0)
 
+  // Keeps moving rather than stopping on the last line. The call can outrun
+  // six stages, and a frozen message reads as a hung page. After a full pass
+  // it loops with a different variant each time, so it never repeats itself
+  // back to back.
   useEffect(() => {
-    const id = setInterval(
-      () => setStage((s) => Math.min(s + 1, STAGES.length - 1)),
-      STAGE_MS,
-    )
+    const id = setInterval(() => setStep((s) => s + 1), STAGE_MS)
     return () => clearInterval(id)
   }, [])
 
+  const stage = step % STAGES.length
+  const lap = Math.floor(step / STAGES.length)
+  const variants = STAGES[stage]
   const name = subjectName?.trim() || `your ${displayNoun}`
-  const line = STAGES[stage][picks[stage]]
+  const line = variants[(stage + lap) % variants.length]
     .replace(/\{name\}/g, name)
     .replace(/\{noun\}/g, displayNoun)
 

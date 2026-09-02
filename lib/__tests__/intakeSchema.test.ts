@@ -40,3 +40,20 @@ describe('parseIntake', () => {
     expect(r.ok && r.intake.undertone).toBe('unsure')
   })
 })
+
+describe('the skip-everything path', () => {
+  it('accepts an intake with no location at all, which is the lead magnet path', () => {
+    expect(parseIntake({ wardrobe: [], undertone: 'unsure' }).ok).toBe(true)
+  })
+
+  it('accepts the empty string an untouched form actually sends', () => {
+    expect(parseIntake({ wardrobe: [], locationId: '' }).ok).toBe(true)
+  })
+
+  it('does not demand a backdrop when no location was chosen', () => {
+    expect(parseIntake({ wardrobe: [], locationId: '' })).not.toEqual({
+      ok: false,
+      error: 'missing_backdrop',
+    })
+  })
+})

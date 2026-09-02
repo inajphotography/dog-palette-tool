@@ -79,7 +79,7 @@ function names(list: string[]): string {
 }
 
 function sessionLine(intake: Intake): string {
-  const loc = locationById(intake.locationId)
+  const loc = intake.locationId ? locationById(intake.locationId) : undefined
   const bd = intake.backdropId ? backdropById(intake.backdropId) : undefined
   const bits = [
     loc?.label ?? intake.locationId,
