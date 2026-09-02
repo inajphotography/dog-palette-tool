@@ -27,9 +27,16 @@ export function distance(a: string, b: string): number {
   return Math.sqrt((l1 - l2) ** 2 + (a1 - a2) ** 2 + (b1 - b2) ** 2)
 }
 
-// Deliberately conservative. Only pairs that genuinely read as one colour go,
-// so a palette is never thinned for being merely harmonious.
-export const SAME_COLOUR = 18
+// Calibrated against Ina's own calls rather than picked.
+//
+// Pairs she named as the same colour: terracotta and burnt sienna measure 6,
+// dusty blue-grey and muted sage teal 8, pale steel and soft blue-grey 6.
+// Pairs inside the palette she approved: midnight slate and washed indigo 17,
+// midnight slate and steel blue 29.
+//
+// So her line sits between 8 and 17, and 12 splits it. An earlier value of 18
+// would have deleted a colour from a palette she had already said was good.
+export const SAME_COLOUR = 12
 
 // A main piece is worth more than an accent, so when two collide the smaller
 // role is the one that goes.
@@ -54,6 +61,12 @@ export function dedupeWear(wear: WearColour[], floor = 4): DedupeResult {
   // Most important roles first, so a collision drops the lesser slot.
   const ordered = [...wear].sort((a, b) => ROLE_RANK[a.role] - ROLE_RANK[b.role])
 
+  // Drop every clash first, then put some back if that went too far. The
+  // earlier version gated on how many were kept so far, which meant an early
+  // clash could never be removed: by the time the guard allowed dropping, the
+  // duplicate was already in.
+  const spare: WearColour[] = []
+
   for (const colour of ordered) {
     if (!VALID_HEX.test(colour.hex)) {
       kept.push(colour)
@@ -62,11 +75,19 @@ export function dedupeWear(wear: WearColour[], floor = 4): DedupeResult {
     const clash = kept.find(
       (k) => VALID_HEX.test(k.hex) && distance(k.hex, colour.hex) < SAME_COLOUR,
     )
-    if (clash && kept.length > floor) {
+    if (clash) {
       dropped.push(`${colour.name} was the same colour as ${clash.name}`)
+      spare.push(colour)
     } else {
       kept.push(colour)
     }
+  }
+
+  // A palette of near-identical colours would otherwise collapse to one entry.
+  while (kept.length < floor && spare.length) {
+    const restored = spare.shift()!
+    kept.push(restored)
+    dropped.pop()
   }
 
   // Restore the model's original order for the ones that survived.

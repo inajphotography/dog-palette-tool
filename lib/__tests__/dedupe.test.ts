@@ -15,18 +15,33 @@ describe('distance', () => {
 })
 
 describe('dedupeWear', () => {
-  it('leaves a genuinely varied palette alone', () => {
+  // The palette Ina looked at and approved. Nothing in it may be removed.
+  it('leaves the palette Ina approved completely alone', () => {
     const wear = [
-      c('#4F4740', 'Deep Taupe', 'main'),
-      c('#6B7F94', 'Slate Blue', 'main'),
-      c('#4A3529', 'Chocolate', 'main'),
-      c('#3E5068', 'Indigo', 'second'),
-      c('#DFD2BC', 'Warm Oat', 'layer'),
-      c('#7A3D4E', 'Deep Berry', 'accent'),
+      c('#2C3E50', 'Midnight Slate', 'main'),
+      c('#4A6741', 'Forest Green', 'main'),
+      c('#5B7FA6', 'Steel Blue', 'main'),
+      c('#7A7A6E', 'Cool Stone', 'second'),
+      c('#3D5A80', 'Washed Indigo', 'layer'),
+      c('#7B2D2D', 'Deep Burgundy', 'accent'),
     ]
     const r = dedupeWear(wear)
     expect(r.wear).toHaveLength(6)
     expect(r.dropped).toEqual([])
+  })
+
+  it('drops an early clash, not only a late one', () => {
+    // The floor guard used to gate on how many were kept so far, so a clash
+    // in the first few colours could never be removed.
+    const wear = [
+      c('#C1622C', 'Terracotta', 'main'),
+      c('#B25526', 'Burnt Sienna', 'main'),
+      c('#2C3E50', 'Midnight Slate', 'main'),
+      c('#4A6741', 'Forest Green', 'second'),
+      c('#7A7A6E', 'Cool Stone', 'layer'),
+      c('#7B2D2D', 'Deep Burgundy', 'accent'),
+    ]
+    expect(dedupeWear(wear).wear.map((w) => w.name)).not.toContain('Burnt Sienna')
   })
 
   it('drops the real pair Ina reported, terracotta beside sienna', () => {
