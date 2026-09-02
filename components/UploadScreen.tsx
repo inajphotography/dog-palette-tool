@@ -1,7 +1,7 @@
 'use client'
 
 import Image from 'next/image'
-import { useState, useRef } from 'react'
+import { useState, useRef, useEffect } from 'react'
 import { config } from '@/photographer.config'
 import { IntakeQuestions } from './IntakeQuestions'
 import { locationById } from '@/lib/locations'
@@ -56,6 +56,7 @@ export function UploadScreen({ onUpload }: UploadScreenProps) {
   const [selectedFile, setSelectedFile] = useState<File | null>(null)
   const [intake, setIntake] = useState<Intake>(EMPTY_INTAKE)
   const [sizeError, setSizeError] = useState(false)
+  const [previewUrl, setPreviewUrl] = useState<string | null>(null)
   const inputRef = useRef<HTMLInputElement>(null)
 
   function handleFileChange(e: React.ChangeEvent<HTMLInputElement>) {
@@ -71,7 +72,15 @@ export function UploadScreen({ onUpload }: UploadScreenProps) {
     }
 
     setSelectedFile(file)
+    setPreviewUrl((old) => {
+      if (old) URL.revokeObjectURL(old)
+      return URL.createObjectURL(file)
+    })
   }
+
+  // Object URLs leak until revoked, and one is created per file the person
+  // picks, so release the last one when the screen goes away.
+  useEffect(() => () => { if (previewUrl) URL.revokeObjectURL(previewUrl) }, [previewUrl])
 
   const needsBackdrop =
     locationById(intake.locationId)?.kind === 'studio' && !intake.backdropId
@@ -147,15 +156,32 @@ export function UploadScreen({ onUpload }: UploadScreenProps) {
           <button
             type="button"
             onClick={() => inputRef.current?.click()}
-            className="w-full border-2 border-dashed border-brand-coral rounded-2xl p-8 flex flex-col items-center gap-2 bg-white mb-4 hover:bg-brand-ivory transition-colors"
+            className={`w-full border-2 border-dashed border-brand-coral rounded-2xl flex flex-col items-center gap-2 bg-white mb-4 hover:bg-brand-ivory transition-colors overflow-hidden ${
+              previewUrl ? 'p-3' : 'p-8'
+            }`}
           >
-            <span className="text-4xl">📷</span>
-            <span className="text-sm font-bold text-brand-coral">
-              {selectedFile ? selectedFile.name : 'Tap to upload'}
-            </span>
-            <span className="text-xs text-brand-light-green">
-              Any photo from your camera roll
-            </span>
+            {previewUrl ? (
+              <>
+                <div className="relative w-full h-44 rounded-xl overflow-hidden bg-brand-ivory">
+                  <Image
+                    src={previewUrl}
+                    alt="The photo you chose"
+                    fill
+                    className="object-cover"
+                    unoptimized
+                  />
+                </div>
+                <span className="text-xs text-brand-light-green">Tap to choose a different photo</span>
+              </>
+            ) : (
+              <>
+                <span className="text-4xl">📷</span>
+                <span className="text-sm font-bold text-brand-coral">Tap to upload</span>
+                <span className="text-xs text-brand-light-green">
+                  Any photo from your camera roll
+                </span>
+              </>
+            )}
           </button>
 
           <input
