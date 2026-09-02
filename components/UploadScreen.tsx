@@ -82,8 +82,12 @@ export function UploadScreen({ onUpload }: UploadScreenProps) {
   // picks, so release the last one when the screen goes away.
   useEffect(() => () => { if (previewUrl) URL.revokeObjectURL(previewUrl) }, [previewUrl])
 
-  const needsBackdrop =
-    intake.locationId ? locationById(intake.locationId)?.kind === 'studio' : false && !intake.backdropId
+  // Both halves matter. Dropping the second one while satisfying the compiler
+  // is what blocked every studio session, chosen backdrop or not.
+  const isStudio = intake.locationId
+    ? locationById(intake.locationId)?.kind === 'studio'
+    : false
+  const needsBackdrop = isStudio && !intake.backdropId
   const canSubmit = Boolean(selectedFile) && !needsBackdrop
 
   async function handleSubmit(e: React.FormEvent) {

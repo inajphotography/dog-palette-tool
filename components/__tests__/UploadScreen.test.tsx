@@ -51,3 +51,33 @@ describe('UploadScreen', () => {
     expect(screen.getByRole('button', { name: /show me what to wear/i })).toBeDisabled()
   })
 })
+
+describe('the studio backdrop gate', () => {
+  async function pickPhoto() {
+    const file = new File(['x'], 'dog.jpg', { type: 'image/jpeg' })
+    await userEvent.upload(screen.getByTestId('file-input'), file)
+  }
+  const submit = () => screen.getByRole('button', { name: /show me what to wear/i })
+
+  it('blocks a studio session until a backdrop is chosen, then releases it', async () => {
+    render(<UploadScreen onUpload={jest.fn()} />)
+    await pickPhoto()
+    expect(submit()).toBeEnabled()
+
+    await userEvent.click(screen.getByRole('button', { name: 'The Studio' }))
+    expect(submit()).toBeDisabled()
+    expect(screen.getByText(/choose your studio backdrop/i)).toBeInTheDocument()
+
+    // The regression: picking a backdrop left the button dead.
+    await userEvent.click(screen.getByRole('radio', { name: 'Black' }))
+    expect(submit()).toBeEnabled()
+    expect(screen.queryByText(/choose your studio backdrop/i)).not.toBeInTheDocument()
+  })
+
+  it('never blocks an outdoor venue', async () => {
+    render(<UploadScreen onUpload={jest.fn()} />)
+    await pickPhoto()
+    await userEvent.click(screen.getByRole('button', { name: 'Lennox Gardens' }))
+    expect(submit()).toBeEnabled()
+  })
+})
