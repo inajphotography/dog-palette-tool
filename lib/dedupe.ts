@@ -29,7 +29,7 @@ export function distance(a: string, b: string): number {
 
 // Deliberately conservative. Only pairs that genuinely read as one colour go,
 // so a palette is never thinned for being merely harmonious.
-const SAME_COLOUR = 18
+export const SAME_COLOUR = 18
 
 // A main piece is worth more than an accent, so when two collide the smaller
 // role is the one that goes.

@@ -1,6 +1,9 @@
 import type { PaletteResult, Intake } from '../lib/types'
 import { UNIVERSAL_BANNED } from '../lib/rules'
 import { voice } from '../lib/locations'
+// One definition of "the same colour", shared with the tool. When the test and
+// the code each had their own, the check kept pairs the test then failed.
+import { distance, SAME_COLOUR } from '../lib/dedupe'
 
 const HEX = /^#[0-9A-Fa-f]{6}$/
 
@@ -8,25 +11,6 @@ const HEX = /^#[0-9A-Fa-f]{6}$/
 // hardcoded colour logic in the product and that stands. A test is allowed to
 // measure, and family labels turned out to be a bad proxy: two colours can sit
 // in one family and still read as completely different colours.
-function hsl(hex: string): { h: number; s: number; l: number } | null {
-  if (!HEX.test(hex)) return null
-  const r = parseInt(hex.slice(1, 3), 16) / 255
-  const g = parseInt(hex.slice(3, 5), 16) / 255
-  const b = parseInt(hex.slice(5, 7), 16) / 255
-  const max = Math.max(r, g, b)
-  const min = Math.min(r, g, b)
-  const l = ((max + min) / 2) * 100
-  const d = max - min
-  const s = d === 0 ? 0 : (d / (1 - Math.abs((max + min) - 1))) * 100
-  if (max === min) return { h: 0, s: 0, l }
-  let h: number
-  if (max === r) h = ((g - b) / d) % 6
-  else if (max === g) h = (b - r) / d + 2
-  else h = (r - g) / d + 4
-  h = (h * 60 + 360) % 360
-  return { h, s, l }
-}
-
 function hueGap(a: number, b: number): number {
   const d = Math.abs(a - b) % 360
   return d > 180 ? 360 - d : d
@@ -71,17 +55,7 @@ export function checkPalette(result: PaletteResult, intake: Intake): string[] {
   const wear = result.wear ?? []
   for (let i = 0; i < wear.length; i++) {
     for (let j = i + 1; j < wear.length; j++) {
-      const a = hsl(wear[i].hex)
-      const b = hsl(wear[j].hex)
-      if (!a || !b) continue
-      // Greys and near-greys have no meaningful hue, so hue comparison would
-      // put charcoal and burgundy in the same bucket. Compare those on
-      // lightness alone.
-      const bothGrey = a.s < 12 && b.s < 12
-      const sameColour = bothGrey
-        ? Math.abs(a.l - b.l) < 12
-        : hueGap(a.h, b.h) < 20 && Math.abs(a.l - b.l) < 12 && Math.abs(a.s - b.s) < 25
-      if (sameColour) {
+      if (distance(wear[i].hex, wear[j].hex) < SAME_COLOUR) {
         failures.push(`${wear[i].name} and ${wear[j].name} read as the same colour`)
       }
     }
