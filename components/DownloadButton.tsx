@@ -58,11 +58,11 @@ export function DownloadButton({ cardRef }: DownloadButtonProps) {
       setTimeout(() => URL.revokeObjectURL(url), 10_000)
       setStatus('idle')
     } catch (error) {
-      // Say what went wrong on screen. This failed silently for weeks, and
-      // then failed opaquely, and neither told anyone anything useful.
-      const message = error instanceof Error ? error.message : String(error)
+      // Rendering a whole card to an image is the least reliable thing here,
+      // and a broken-looking button is worse than no button. Fall back to the
+      // thing every phone can already do, and log the real reason for us.
       console.error('[download] failed:', error)
-      setDetail(message.slice(0, 120))
+      setDetail(error instanceof Error ? error.message : String(error))
       setStatus('error')
     }
   }
@@ -74,10 +74,15 @@ export function DownloadButton({ cardRef }: DownloadButtonProps) {
         disabled={status === 'saving'}
         className="w-full border-2 border-brand-coral text-brand-coral py-2.5 rounded-xl text-sm font-bold disabled:opacity-50 hover:bg-brand-pink-muted transition-colors"
       >
-        {status === 'saving' ? 'Saving...' : status === 'error' ? 'Try again' : 'Save palette'}
+        {status === 'saving' ? 'Saving...' : 'Save palette'}
       </button>
-      {status === 'error' && detail && (
-        <p className="text-[0.6rem] text-red-700 leading-tight text-center">{detail}</p>
+      {status === 'error' && (
+        <p className="text-[0.62rem] text-brand-brown leading-snug text-center">
+          Screenshot this page to keep your palette.
+        </p>
+      )}
+      {status === 'error' && detail && process.env.NEXT_PUBLIC_DEBUG_SAVE === '1' && (
+        <p className="text-[0.55rem] text-red-700 leading-tight text-center break-all">{detail}</p>
       )}
     </div>
   )
